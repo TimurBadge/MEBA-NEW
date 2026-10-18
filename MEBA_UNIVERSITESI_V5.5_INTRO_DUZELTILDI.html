@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="tr"><head><meta charset="utf-8"><title>MEBA V4.0 · Aile Birliği ve MEBA Üniversitesi</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>
+:root{--a:#3b9bff;--b1:#0b3d84;--b2:#04142e;--r:28px;--g:rgba(255,255,255,.09);--gb:rgba(255,255,255,.2);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body.t2{--a:#b07cff;--b1:#4b1f8f;--b2:#12062c}body.t3{--a:#3de0a0;--b1:#0b6b4b;--b2:#021c13}body.t4{--a:#ff9a5c;--b1:#a13a16;--b2:#2a0b03}body.sharp{--r:6px}
+body{margin:0;font-family:system-ui,"Segoe UI",Arial,sans-serif;color:#fff;min-height:100vh;background:linear-gradient(135deg,var(--b1),var(--b2));background-attachment:fixed;overflow-x:hidden}
+.blob{position:fixed;border-radius:50%;filter:blur(70px);opacity:.55;z-index:0;pointer-events:none;background:var(--a)}
+.blob:nth-child(1){width:46vw;height:46vw;left:-12vw;top:-14vw;animation:fl1 14s ease-in-out infinite}
+.blob:nth-child(2){width:38vw;height:38vw;right:-10vw;bottom:-12vw;animation:fl2 17s ease-in-out infinite;opacity:.4}
+.blob:nth-child(3){width:24vw;height:24vw;left:45vw;top:30vh;animation:fl1 21s ease-in-out infinite reverse;opacity:.25}
+@keyframes fl1{50%{transform:translate(8vw,10vh) scale(1.2)}}@keyframes fl2{50%{transform:translate(-9vw,-8vh) scale(1.15)}}
+@keyframes rise{from{opacity:0;transform:translateY(34px) scale(.96)}to{opacity:1;transform:none}}
+@keyframes pop{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:none}}
+@keyframes flo{50%{transform:translateY(-16px) rotate(2deg)}}
+@keyframes pulse{0%{box-shadow:0 0 0 0 var(--a)}100%{box-shadow:0 0 0 22px transparent}}
+@keyframes shine{to{transform:translateX(260%) skewX(-20deg)}}
+@keyframes shake{20%,60%{transform:translateX(-9px)}40%,80%{transform:translateX(9px)}}
+.glass{position:relative;z-index:1;background:var(--g);backdrop-filter:blur(20px) saturate(150%);-webkit-backdrop-filter:blur(20px) saturate(150%);border:1px solid var(--gb);border-radius:var(--r);box-shadow:0 10px 40px #0005,inset 0 1px 0 #fff3}
+.hid{display:none!important}
+.btn{position:relative;overflow:hidden;background:var(--a);color:#fff;border:0;border-radius:calc(var(--r)*.6);padding:14px 22px;font-size:16px;font-weight:700;cursor:pointer;transition:.25s}
+.btn:hover{transform:translateY(-3px) scale(1.03);box-shadow:0 10px 25px #0006}.btn:active{transform:scale(.97)}
+.btn::after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:#fff5;transform:skewX(-20deg)}.btn:hover::after{animation:shine .8s}
+.btn.g{background:var(--g);border:1px solid var(--gb)}
+input{width:100%;padding:14px 16px;border-radius:calc(var(--r)*.5);border:1px solid var(--gb);background:#0003;color:#fff;font-size:16px;outline:0;transition:.25s}
+input:focus{border-color:var(--a);box-shadow:0 0 0 4px #ffffff22;background:#0005}
+label{font-size:14px;opacity:.85;display:block;margin:12px 0 6px}
+.err{color:#ffc2c2;min-height:20px;font-size:14px;margin-top:8px}.shake{animation:shake .45s}
+
+/* LOGIN LAYOUT */
+#login{position:relative;z-index:1;min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center}
+.left{text-align:center;padding:30px}
+.mark{font-size:clamp(60px,9vw,120px);font-weight:900;letter-spacing:4px;background:linear-gradient(90deg,#fff,var(--a),#fff);background-size:200%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine2 5s linear infinite}
+@keyframes shine2{to{background-position:200% 0}}
+.left h2{font-size:42px;margin:6px 0}.left p{opacity:.8;font-size:18px}
+.fam{font-size:70px;display:inline-block;animation:flo 4s ease-in-out infinite}
+.lcard{max-width:470px;width:calc(100% - 40px);margin:auto;padding:34px}
+.row{display:flex;gap:10px;flex-wrap:wrap}.row>*{flex:1;min-width:130px}
+.sep{display:flex;align-items:center;gap:12px;opacity:.7;font-size:14px;margin:18px 0}.sep::before,.sep::after{content:"";flex:1;height:1px;background:var(--gb)}
+.pw{position:relative}.pw span{position:absolute;right:14px;top:13px;cursor:pointer;font-size:18px}
+
+/* MEBA STAGED INTRO (ORTADAN BÜYÜYEN YAZILAR) */
+#mebaIntro{
+  position:fixed;inset:0;z-index:900;display:grid;place-items:center;
+  overflow:hidden;background:linear-gradient(135deg,#00366f,#0a76d9 48%,#041f55);
+  transition:opacity .8s ease,visibility .8s ease;
+}
+#mebaIntro.hide{opacity:0;visibility:hidden;pointer-events:none}
+.intro-stage{
+  position:relative;z-index:2;width:min(900px,92vw);min-height:400px;
+  display:grid;place-items:center;text-align:center;
+}
+.intro-family{
+  position:absolute;inset:0;display:grid;place-items:center;
+  font-size:clamp(90px,15vw,180px);
+  opacity:0;transform:scale(.1);
+  animation:introZoom 1.2s cubic-bezier(.12,.9,.18,1.15) 0.2s forwards;
+  filter:drop-shadow(0 20px 45px #001b4c88);
+}
+.intro-welcome{
+  position:absolute;inset:0;display:grid;place-items:center;
+  opacity:0;transform:scale(.1);
+  animation:introZoom 1.4s cubic-bezier(.15,.85,.2,1) 1.4s forwards;
+}
+.intro-welcome h1{margin:0;font-size:clamp(38px,7vw,76px);font-weight:900;text-shadow:0 12px 40px #001b4c88}
+.intro-welcome .v{display:block;margin-top:10px;font-size:clamp(18px,3vw,30px);font-weight:800;letter-spacing:5px;opacity:.9}
+.intro-info{
+  position:absolute;inset:0;display:grid;place-items:center;
+  opacity:0;transform:scale(.1);
+  animation:introZoom 1.5s cubic-bezier(.15,.85,.2,1) 2.8s forwards;
+}
+.intro-info .bigmark{
+  font-size:clamp(70px,11vw,130px);font-weight:1000;letter-spacing:8px;
+  background:linear-gradient(90deg,#fff,#7bd1ff,#fff);background-size:200%;
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:introShine 1.4s linear infinite;
+}
+.intro-info h2{font-size:clamp(26px,5vw,50px);margin:0 0 10px}
+.intro-info p{font-size:clamp(16px,2.4vw,22px);opacity:.9;margin:0}
+
+@keyframes introZoom{
+  0%{opacity:0;transform:scale(.1)}
+  30%{opacity:1;transform:scale(1)}
+  75%{opacity:1;transform:scale(1.1)}
+  100%{opacity:0;transform:scale(1.4)}
+}
+@keyframes introShine{to{background-position:200% 0}}
+
+/* SOL VE SAĞ KARTLARIN YERİNE GEÇİŞ ANİMASYONLARI */
+/* Sol kart ilk başta gizli ve sağda durur */
+#login .left{
+  opacity: 0;
+  transform: translateX(60vw);
+  transition: transform 1s cubic-bezier(.2,.9,.3,1), opacity .8s ease;
+}
+/* Sol kartın sağdan gelip yerine oturması */
+#login.left-in .left{
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Sağdaki Giriş Kartı ilk başta ekranın sağında gizli */
+#login .right-card{
+  opacity: 0;
+  transform: translateX(100vw);
+  transition: transform 0.9s cubic-bezier(.2,.9,.3,1), opacity .7s ease;
+}
+/* Sağ kartın otomatik kayarak yerine oturması */
+#login.form-in .right-card{
+  opacity: 1;
+  transform: translateX(0);
+}
+
+
+/* V4.0 YENİ BÖLÜMLER */
+.weather-wrap{display:grid;grid-template-columns:1.2fr .8fr;gap:18px}
+.weather-main{padding:28px;min-height:260px}
+.weather-temp{font-size:72px;font-weight:900;line-height:1;margin:14px 0 8px}
+.weather-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
+.weather-meta .glass{padding:16px;text-align:center}
+.help-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.help-item{padding:22px}
+.help-item h3{margin:0 0 8px}
+@media(max-width:820px){.weather-wrap,.help-grid{grid-template-columns:1fr}.weather-meta{grid-template-columns:1fr}}
+
+/* APP & ADMIN STYLES */
+.wrap{position:relative;z-index:1;max-width:1100px;margin:auto;padding:28px}
+h1{font-weight:300;font-size:clamp(26px,4vw,44px);margin:0 0 20px}h1 b{font-weight:800}
+.grid{display:grid;gap:18px;grid-template-columns:repeat(3,1fr)}
+.opt{cursor:pointer;text-align:center;padding:44px 16px;font-size:20px;transition:.3s}.opt:hover{transform:translateY(-8px) scale(1.03);background:#ffffff22}
+.opt i{display:block;font-size:46px;font-style:normal;margin-bottom:10px;animation:flo 3.5s ease-in-out infinite}
+#app{position:relative;z-index:1;padding:16px 16px 16px 106px;min-height:100vh}
+.rail{position:fixed;left:14px;top:14px;bottom:14px;width:76px;padding:14px 10px;overflow:hidden;transition:width .4s cubic-bezier(.2,.9,.3,1);z-index:20;display:flex;flex-direction:column}
+.rail:hover{width:250px}
+.rail .lg{font-size:24px;font-weight:900;text-align:center;margin-bottom:14px;white-space:nowrap}
+.nv{display:flex;align-items:center;gap:14px;width:100%;background:none;border:0;color:#fff;padding:13px 15px;border-radius:calc(var(--r)*.7);font-size:16px;cursor:pointer;margin-bottom:6px;white-space:nowrap;transition:.25s;text-align:left}
+.nv span{font-size:22px;width:26px;flex:none;text-align:center}.nv:hover{background:#ffffff1f;transform:translateX(4px)}.nv.on{background:var(--a);box-shadow:0 6px 20px #0005}
+.ban{padding:12px 18px;margin-bottom:16px;font-size:14px;display:flex;gap:12px;align-items:center}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.ic{display:flex;gap:6px;padding:8px 12px;align-items:center}.ic i{font-style:normal;font-size:20px;padding:6px 8px;border-radius:12px;cursor:pointer;transition:.2s}
+.av{width:42px;height:42px;border-radius:50%;background:var(--a);display:grid;place-items:center;font-weight:800;animation:pulse 2.4s infinite}
+.hero{display:grid;grid-template-columns:2fr 1fr;gap:18px;margin-bottom:18px}
+.cal{padding:28px;overflow:hidden;position:relative;min-height:290px}
+.cal h2{font-size:34px;font-weight:300;margin:10px 0}.cal h2 b{font-weight:800}
+.days{display:flex;gap:8px;margin-top:22px;align-items:center;flex-wrap:wrap}
+.d{background:#0004;border-radius:14px;padding:14px 18px;font-weight:700;cursor:pointer;transition:.25s}.d:hover{transform:translateY(-6px);background:#ffffff33}.d.on{background:var(--a);transform:scale(1.12);box-shadow:0 8px 20px #0006}
+.ar{width:38px;height:38px;border-radius:12px;border:0;background:#fff;color:#123;cursor:pointer;font-weight:900;transition:.2s}
+.fig{position:absolute;right:30px;bottom:-6px;font-size:130px;animation:flo 5s ease-in-out infinite;filter:drop-shadow(0 20px 20px #0006)}
+.stats{display:grid;grid-template-columns:1fr 1fr;align-items:center;text-align:center;padding:20px}
+.stats b{font-size:56px;display:block;animation:pop .8s both}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px}
+.box{padding:24px}.box h3{margin:0 0 10px;font-size:22px}
+.li{display:flex;justify-content:space-between;background:#fff1;padding:10px 14px;border-radius:12px;margin:7px 0;transition:.2s}
+.li button{background:none;border:0;color:#fff;cursor:pointer;font-size:16px}
+.sec{font-size:26px;margin:26px 0 14px}
+.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.tier{padding:26px;transition:.35s;border:2px solid var(--gb)}
+.tier.cur{border-color:var(--a);box-shadow:0 0 0 4px #ffffff18,0 0 40px var(--a)}
+.tier h3{margin:0;font-size:24px}.tier .p{font-size:34px;font-weight:900;margin:6px 0}.tier ul{padding-left:20px;line-height:1.9}
+.badge{display:inline-block;background:var(--a);border-radius:20px;padding:3px 12px;font-size:12px;animation:pop .5s both}
+#abotBtn{position:fixed;right:22px;bottom:calc(22px + env(safe-area-inset-bottom,0px));width:68px;height:68px;border-radius:50%;border:2px solid var(--a);color:#fff;font-size:28px;cursor:pointer;z-index:30;background:var(--g);backdrop-filter:blur(14px);animation:pulse 2.2s infinite}
+#abot{position:fixed;right:22px;bottom:104px;width:min(380px,calc(100% - 44px));height:440px;z-index:31;display:flex;flex-direction:column;padding:16px}
+#msgs{flex:1;overflow:auto;font-size:14px;line-height:1.5}#msgs p{margin:6px 0;padding:9px 12px;border-radius:14px;background:#fff2}#msgs p.me{background:var(--a);margin-left:30px}
+.back{margin-top:14px}
+/* SMSBO */
+.smsbo-card{padding:22px;display:flex;align-items:center;gap:16px;cursor:pointer;margin-bottom:18px;transition:.25s}
+.smsbo-icon{width:58px;height:58px;border-radius:18px;background:var(--a);display:grid;place-items:center;font-size:30px;flex:none}
+.sms-layout{display:grid;grid-template-columns:300px 1fr;gap:18px;min-height:620px}
+.sms-list{padding:18px}
+.sms-person{display:flex;align-items:center;gap:12px;padding:12px;border-radius:16px;cursor:pointer;margin:6px 0;background:#fff1;transition:.2s}
+.sms-person:hover,.sms-person.on{background:var(--a)}
+.sms-avatar{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:var(--a);font-weight:800;flex:none}
+.sms-chat{display:flex;flex-direction:column;padding:18px;min-height:620px}
+.sms-chat-head{display:flex;align-items:center;gap:12px;padding-bottom:14px;border-bottom:1px solid var(--gb)}
+.sms-messages{flex:1;overflow:auto;padding:18px 4px}
+.sms-empty{text-align:center;margin:auto;max-width:420px;padding:30px;opacity:.9}
+.sms-empty .big{font-size:60px;display:block;margin-bottom:12px}
+.sms-compose{display:flex;gap:8px;margin-top:12px}.sms-compose input{flex:1}
+.sms-msg{max-width:75%;padding:10px 14px;border-radius:16px;margin:8px 0;background:#fff2}
+.sms-msg.me{margin-left:auto;background:var(--a)}
+@media(max-width:820px){#login{grid-template-columns:1fr}.hero,.cards,.tiers,.grid{grid-template-columns:1fr}#app{padding:12px 12px 90px}.rail{top:auto;bottom:10px;left:10px;right:10px;width:auto;height:70px;flex-direction:row;padding:6px}.rail .lg,.nv b{display:none}.nv{justify-content:center;padding:10px}.fig{font-size:80px}}
+#toast{position:fixed;top:calc(18px + env(safe-area-inset-top,0px));left:50%;transform:translate(-50%,-140px);z-index:99;padding:16px 26px;max-width:92vw;text-align:center;font-weight:700;transition:transform .5s cubic-bezier(.2,.9,.3,1)}#toast.on{transform:translate(-50%,0)}
+
+/* Aile giriş ekranı: küçük telefonlarda da rahat kullanım */
+@media(max-width:640px){
+ #login{min-height:100svh!important;padding:22px 16px!important;gap:20px!important;grid-template-columns:1fr!important;align-content:center!important}
+ #login .left{text-align:center!important}
+ #login .left .fam{font-size:44px!important}
+ #login .right-card{width:100%!important;max-width:440px!important;margin:0 auto!important;padding:22px!important}
+ #login .mark{font-size:42px!important}
+}
+#login .sep{display:flex;align-items:center;gap:12px;justify-content:center;margin:18px 0;font-size:13px;letter-spacing:.2px;opacity:.85;text-transform:lowercase}
+#login .sep:before,#login .sep:after{content:"";height:1px;flex:1;background:#ffffff45}
+
+/* MEBA İŞNAMES uygulama teması: mevcut MEBA cam/şablon yapısını korur, kurumsal lacivert-altın görünüm ekler */
+body.isnames-mode{--a:#e9b85b;--g:linear-gradient(135deg,#112c49dd,#071625e8);--gb:#e9b85b42;background:radial-gradient(ellipse at 15% 5%,#244c70 0%,transparent 38%),radial-gradient(ellipse at 90% 80%,#57401d55 0%,transparent 35%),#06111f!important;color:#f5f7fb}
+body.isnames-mode .blob{background:#c9943e22}
+body.isnames-mode .rail,body.isnames-mode .ban,body.isnames-mode .glass{border-color:#e9b85b35;box-shadow:0 14px 40px #0003,0 0 24px #d7a54a0a}
+body.isnames-mode .rail .lg{color:#f4c86d;text-shadow:0 0 24px #e9b85b55}
+body.isnames-mode .nv.on,body.isnames-mode .badge,body.isnames-mode .smsbo-icon,body.isnames-mode .sms-avatar{background:linear-gradient(135deg,#b9812c,#f2d28a);color:#102033}
+body.isnames-mode .btn{background:linear-gradient(110deg,#9d6c24,#f0cb78);color:#111c2b;border-color:#f2d28a88;box-shadow:0 8px 22px #c99a3b22}
+body.isnames-mode .btn.g{background:#ffffff0b;color:#f5f7fb;border-color:#e9b85b55}
+body.isnames-mode .cal{background:linear-gradient(135deg,#102b45eF,#091522ee)}
+body.isnames-mode .cal h2 b{color:#f4c86d}
+body.isnames-mode .d.on{background:linear-gradient(135deg,#9d6c24,#f0cb78);color:#102033}
+body.isnames-mode .isn-home-head{display:flex;align-items:center;gap:14px;margin:4px 0 18px;padding:18px 22px;border:1px solid #e9b85b44;border-radius:22px;background:linear-gradient(110deg,#112c49ee,#101a2aee);box-shadow:0 12px 32px #0003}
+body.isnames-mode .isn-home-head .mark-mini{font-size:38px;filter:drop-shadow(0 0 14px #e9b85b33);animation:isnFloat 3s ease-in-out infinite}
+body.isnames-mode .isn-home-head h2{margin:0;color:#f4c86d;letter-spacing:2px;font-size:clamp(20px,3vw,30px)}
+body.isnames-mode .isn-home-head p{margin:4px 0 0;opacity:.78}
+body.isnames-mode .isn-shortcuts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:18px 0}
+body.isnames-mode .isn-shortcut{padding:22px;border:1px solid #e9b85b35;border-radius:22px;background:linear-gradient(145deg,#132e49dd,#0b1727ee);cursor:pointer;transition:transform .25s,box-shadow .25s,border-color .25s;min-height:145px;position:relative;overflow:hidden}
+body.isnames-mode .isn-shortcut:before{content:"";position:absolute;inset:-80% auto auto -30%;width:80%;height:200%;background:#ffffff09;transform:rotate(28deg);transition:transform .6s}
+body.isnames-mode .isn-shortcut:hover{transform:translateY(-7px) scale(1.015);border-color:#f4c86d99;box-shadow:0 18px 36px #0004,0 0 26px #e9b85b13}
+body.isnames-mode .isn-shortcut:hover:before{transform:translateX(220%) rotate(28deg)}
+body.isnames-mode .isn-shortcut .shortcut-icon{font-size:38px;display:block;margin-bottom:12px;animation:isnFloat 3.5s ease-in-out infinite}
+body.isnames-mode .isn-shortcut h3{margin:0 0 5px;color:#f4c86d}
+body.isnames-mode .isn-shortcut p{margin:0;opacity:.75;font-size:13px}
+body.isnames-mode .ban{background:linear-gradient(110deg,#132f4b,#101a29);color:#f4dba8}
+@media(max-width:700px){body.isnames-mode .isn-shortcuts{grid-template-columns:1fr}body.isnames-mode .isn-shortcut{min-height:0}}
+
+/* MEBA İŞNAMES V5.5 */
+.isn-intro{position:fixed;inset:0;z-index:1200;display:grid;place-items:center;overflow:hidden;background:radial-gradient(ellipse at 50% 45%,#1b4f72 0%,#071b2c 48%,#020912 100%);}
+.isn-intro:not(.hid){animation:isnFadeIn .5s ease both}.isn-intro.hide-intro{opacity:0;visibility:hidden;transition:opacity .7s,visibility .7s}
+.isn-intro-content{position:relative;z-index:2;text-align:center;padding:24px;animation:isnLogoIn 1.2s cubic-bezier(.15,.9,.25,1) both}
+.isn-business-icon{font-size:clamp(76px,13vw,140px);filter:drop-shadow(0 12px 28px #00b9ff66);animation:isnFloat 2.8s ease-in-out infinite}
+.isn-intro-title,.isn-brand-title{font-weight:950;letter-spacing:clamp(2px,.7vw,8px);font-size:clamp(32px,6.4vw,68px);background:linear-gradient(90deg,#fff,#83e2ff,#d9f7ff,#fff);background-size:220%;color:transparent;-webkit-background-clip:text;background-clip:text;animation:isnShine 3s linear infinite}
+.isn-intro-sub,.isn-tagline{font-weight:800;letter-spacing:clamp(1px,.35vw,4px);font-size:clamp(14px,2.2vw,23px);margin-top:12px}
+.isn-version{margin:22px auto 0;border:1px solid #8be6ff77;background:#9feaff12;border-radius:999px;padding:8px 18px;width:max-content;letter-spacing:4px;font-weight:800}
+.isn-orbit{position:absolute;border:1px solid #73dfff55;border-radius:50%;width:min(80vw,700px);aspect-ratio:1;animation:isnOrbit 12s linear infinite}
+.orbit-a{transform:rotateX(68deg) rotateZ(20deg)}.orbit-b{width:min(60vw,520px);transform:rotateX(68deg) rotateZ(-35deg);animation-direction:reverse;border-color:#fff3}
+.isn-login{position:relative;z-index:5;min-height:100vh;padding:34px;display:grid;grid-template-columns:1fr minmax(320px,460px);align-items:center;gap:40px;background:radial-gradient(ellipse at 20% 15%,#164d6a 0%,transparent 45%),linear-gradient(135deg,#071c2b,#020812);animation:isnFadeIn .7s ease both}
+.isn-brand{text-align:center;padding:24px}.isn-logo{font-size:clamp(74px,10vw,120px);animation:isnFloat 4s ease-in-out infinite;filter:drop-shadow(0 12px 24px #00bfff55)}.isn-tagline{color:#c8e9f5}.isn-version-pill{display:inline-block;margin-top:26px;border:1px solid #a2eaff55;background:#8deaff12;border-radius:999px;padding:9px 17px;letter-spacing:3px;font-weight:800}
+.isn-card{width:100%;max-width:460px;padding:clamp(22px,4vw,38px);margin:auto;border-color:#a2eaff44;background:linear-gradient(145deg,#ffffff12,#ffffff06)}.isn-card-head{text-align:center;margin-bottom:22px}.isn-lock{font-size:32px}.isn-card h2{font-size:28px;margin:8px 0}.isn-card-head p{opacity:.75;margin:0}.isn-pin-wrap{position:relative}.isn-pin-wrap input{padding-right:55px;letter-spacing:5px}.isn-pin-wrap button{position:absolute;right:8px;top:6px;border:0;background:transparent;color:white;font-size:20px;padding:7px;cursor:pointer}.isn-submit{width:100%;display:flex;justify-content:center;gap:12px;margin-top:12px;background:linear-gradient(100deg,#087fae,#16b7d3);box-shadow:0 8px 24px #00b9ff24}.isn-back{width:100%;margin-top:18px;background:transparent;border:0;color:#c8e9f5;padding:10px;cursor:pointer}.isn-back:hover{text-decoration:underline}.isn-login label{margin-top:16px}.isn-login input:focus{border-color:#78e1ff;box-shadow:0 0 0 4px #42cfff20}
+@keyframes isnFadeIn{from{opacity:0}to{opacity:1}}@keyframes isnLogoIn{0%{opacity:0;transform:scale(.25) translateY(24px)}65%{opacity:1;transform:scale(1.08)}100%{opacity:1;transform:scale(1)}}@keyframes isnFloat{50%{transform:translateY(-12px) rotate(2deg)}}@keyframes isnShine{to{background-position:220% 0}}@keyframes isnOrbit{to{rotate:360deg}}
+@media(max-width:760px){.isn-login{grid-template-columns:1fr;gap:12px;padding:22px 16px;align-content:center}.isn-brand{padding:8px}.isn-logo{font-size:60px}.isn-brand-title{font-size:clamp(30px,8vw,46px)}.isn-tagline{font-size:14px}.isn-version-pill{margin-top:12px}.isn-card{max-width:460px}.isn-orbit{width:110vw}.orbit-b{width:80vw}}
+@media(prefers-reduced-motion:reduce){.isn-intro-content,.isn-business-icon,.isn-logo,.isn-intro-title,.isn-brand-title,.isn-orbit{animation-duration:.01ms!important;animation-iteration-count:1!important}}
+
+
+/* MEBA ÜNİVERSİTESİ — BAMM! dinamik, sinematik eğitim introsu */
+.uni-intro{position:fixed;inset:0;z-index:1500;overflow:hidden;display:grid;place-items:center;color:#fff;background:#030511;isolation:isolate;}
+.uni-intro:before{content:"";position:absolute;inset:-45%;z-index:0;background:conic-gradient(from 0deg,transparent 0 20%,#00d9ff20 25%,transparent 33%,#a855f720 48%,transparent 58%,#ffcf5a20 70%,transparent 80%);animation:uniNebula 9s linear infinite;}
+.uni-intro:after{content:"";position:absolute;inset:0;z-index:1;background:radial-gradient(ellipse at center,#142d56aa 0%,#050816dd 58%,#02030a 100%);}
+.uni-intro:not(.hid){animation:uniFade .35s ease both}.uni-intro.hide-uni{opacity:0;visibility:hidden;transition:opacity .7s,visibility .7s}
+@keyframes uniFade{from{opacity:0;filter:brightness(3)}to{opacity:1;filter:brightness(1)}}
+@keyframes uniNebula{to{transform:rotate(360deg) scale(1.1)}}
+.uni-intro-content{position:relative;z-index:5;text-align:center;padding:24px;animation:uniImpact .95s cubic-bezier(.12,.9,.18,1) both;}
+@keyframes uniImpact{0%{opacity:0;transform:scale(.25) rotate(-8deg);filter:blur(18px)}55%{opacity:1;transform:scale(1.09) rotate(2deg);filter:blur(0)}75%{transform:scale(.96) rotate(-1deg)}100%{transform:scale(1) rotate(0)}}
+.uni-cap{position:relative;font-size:clamp(64px,11vw,120px);display:inline-block;filter:drop-shadow(0 0 20px #6de8ff) drop-shadow(0 0 48px #805bff);animation:uniCapBlast 2.4s ease-in-out infinite;}
+@keyframes uniCapBlast{0%,100%{transform:translateY(0) rotate(-8deg) scale(1)}35%{transform:translateY(-22px) rotate(9deg) scale(1.16)}60%{transform:translateY(5px) rotate(-3deg) scale(.98)}}
+.uni-kicker{font-size:clamp(10px,1.5vw,14px);letter-spacing:clamp(3px,1vw,10px);font-weight:900;color:#8ff4ff;margin:8px 0 14px;text-shadow:0 0 22px #00d9ff;animation:uniKickerIn .7s .2s both;}
+@keyframes uniKickerIn{from{opacity:0;letter-spacing:0;transform:translateY(25px)}to{opacity:1;letter-spacing:inherit;transform:none}}
+.uni-title{font-size:clamp(36px,8.4vw,94px);line-height:.96;font-weight:1000;letter-spacing:clamp(1px,.7vw,8px);background:linear-gradient(90deg,#fff 0%,#72f6ff 18%,#fff 33%,#c5a2ff 52%,#fff 68%,#ffe68b 83%,#fff 100%);background-size:300% auto;color:transparent;-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 0 18px #49bfff55);animation:uniShimmer 1.8s linear infinite,uniTitlePunch .8s .12s both;}
+.uni-title span{display:block;font-size:.52em;letter-spacing:clamp(4px,1.3vw,15px);margin-top:15px;}
+@keyframes uniShimmer{to{background-position:300% center}}
+@keyframes uniTitlePunch{0%{opacity:0;transform:translateX(-70px) skewX(-18deg);filter:blur(12px)}65%{opacity:1;transform:translateX(8px) skewX(2deg);filter:blur(0)}100%{transform:translateX(0) skewX(0)}}
+.uni-subtitle{font-size:clamp(14px,2.3vw,24px);font-weight:800;letter-spacing:clamp(1px,.4vw,4px);color:#e6f7ff;margin:24px 0 28px;text-shadow:0 0 18px #58cfff;animation:uniRise .65s .55s both;}
+.uni-progress{width:min(340px,70vw);height:6px;margin:auto;border-radius:20px;background:#ffffff1c;overflow:hidden;box-shadow:0 0 20px #4bdcff33}.uni-progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,#00e5ff,#fff,#a78bfa,#ffdf70);box-shadow:0 0 24px #6ed7ff;animation:uniLoad 3.6s ease-in-out forwards}
+@keyframes uniLoad{to{width:100%}}
+.uni-loading{font-size:10px;letter-spacing:3px;color:#b7dcff;margin-top:14px;animation:uniBlink .55s ease-in-out infinite alternate}@keyframes uniBlink{to{opacity:.35;letter-spacing:5px}}
+.uni-orbit{position:absolute;left:50%;top:50%;z-index:2;border:2px solid #74eaff38;border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 22px #36c9ff15,inset 0 0 24px #9d73ff13;pointer-events:none}.uni-orbit-one{width:min(100vw,1000px);height:min(53vw,500px);animation:uniOrbit 5s linear infinite}.uni-orbit-two{width:min(76vw,760px);height:min(90vw,760px);border-color:#d6a6ff35;animation:uniOrbit 7s linear infinite reverse}.uni-orbit:after{content:"✦";position:absolute;top:0;left:50%;font-size:30px;color:#b8f8ff;text-shadow:0 0 18px #00e5ff;transform:translate(-50%,-50%)}
+@keyframes uniOrbit{to{transform:translate(-50%,-50%) rotate(360deg)}}
+.uni-stars{position:absolute;inset:0;z-index:3;pointer-events:none}.uni-stars i{position:absolute;color:#b5f8ff;font-style:normal;text-shadow:0 0 18px currentColor;animation:uniTwinkle .9s ease-in-out infinite alternate}.uni-stars i:nth-child(1){left:8%;top:20%;font-size:38px;animation:uniFlyOne 3s ease-in-out infinite}.uni-stars i:nth-child(2){left:18%;top:75%;font-size:40px;animation:uniFlyTwo 3.7s ease-in-out infinite}.uni-stars i:nth-child(3){right:12%;top:17%;font-size:44px;animation:uniFlyThree 3.3s ease-in-out infinite}.uni-stars i:nth-child(4){right:17%;bottom:15%;font-size:34px;animation:uniFlyOne 4s ease-in-out infinite reverse}.uni-stars i:nth-child(5){right:7%;top:58%;font-size:30px;animation:uniFlyTwo 2.8s ease-in-out infinite reverse}.uni-stars i:nth-child(6){left:9%;bottom:19%;font-size:36px;animation:uniFlyThree 3.5s ease-in-out infinite reverse}
+@keyframes uniTwinkle{to{opacity:.18;transform:scale(.55) rotate(90deg)}}@keyframes uniFlyOne{50%{transform:translate(55px,-38px) rotate(120deg) scale(1.4)}}@keyframes uniFlyTwo{50%{transform:translate(-45px,-48px) rotate(-120deg) scale(.7)}}@keyframes uniFlyThree{50%{transform:translate(-35px,55px) rotate(180deg) scale(1.25)}}
+.uni-bottom-glow{position:absolute;z-index:2;bottom:-25vh;width:90vw;height:40vh;background:#398eff55;filter:blur(65px);border-radius:50%;animation:uniGlow 2.5s ease-in-out infinite alternate}@keyframes uniGlow{to{transform:scale(1.3);opacity:.5}}
+.uni-sweep{position:absolute;z-index:3;top:-30%;left:-20%;width:10%;height:160%;background:linear-gradient(90deg,transparent,#ffffff17,#7eeeff55,#ffffff15,transparent);transform:rotate(22deg);filter:blur(5px);animation:uniSweep 2.6s ease-in-out infinite;pointer-events:none}@keyframes uniSweep{0%{left:-25%}100%{left:125%}}
+.uni-home{position:relative;z-index:10;min-height:100vh;padding:clamp(18px,4vw,48px);background:radial-gradient(ellipse at 85% 8%,#293f7d 0%,transparent 34%),linear-gradient(140deg,#08152d,#0b2143 58%,#111637);animation:uniRise .65s both}
+.uni-top{max-width:1180px;margin:0 auto 30px;display:flex;align-items:center;gap:15px}.uni-mini-cap{width:52px;height:52px;display:grid;place-items:center;border:1px solid #ffffff25;background:#ffffff12;border-radius:17px;font-size:29px;box-shadow:0 8px 28px #0003}.uni-eyebrow{font-size:10px;letter-spacing:3px;color:#9bdcff;font-weight:850}.uni-top h1{margin:3px 0 0;font-size:clamp(20px,3vw,30px)}.uni-back{margin-left:auto;white-space:nowrap}
+.uni-hero{max-width:1180px;margin:auto;min-height:300px;padding:clamp(24px,5vw,54px);border:1px solid #ffffff20;border-radius:30px;background:linear-gradient(110deg,#173b6eeb,#302e6a99),radial-gradient(circle at 80% 50%,#79caff44,transparent 35%);display:grid;grid-template-columns:1.2fr .8fr;align-items:center;overflow:hidden;box-shadow:0 24px 70px #0003}.uni-pill{display:inline-block;padding:8px 12px;border-radius:40px;background:#9cdfff18;border:1px solid #a5e0ff33;color:#bcecff;font-size:10px;letter-spacing:1.5px;font-weight:850}.uni-hero h2{font-size:clamp(30px,4.6vw,54px);line-height:1.08;margin:20px 0 12px;letter-spacing:-1.5px}.uni-hero h2 em{font-style:normal;color:#9ee6ff}.uni-hero p{color:#d1def2;font-size:15px;max-width:460px;line-height:1.7}.uni-start{margin-top:15px;background:linear-gradient(100deg,#51bdf4,#7775ff);box-shadow:0 9px 26px #468bff33}.uni-hero-art{min-height:230px;position:relative;display:grid;place-items:center}.uni-book{font-size:clamp(95px,13vw,150px);filter:drop-shadow(0 20px 25px #0004);animation:uniFloat 4s ease-in-out infinite}.uni-planet{position:absolute;right:8%;top:8%;font-size:44px;animation:uniOrbit 20s linear infinite}.uni-pencil{position:absolute;left:10%;bottom:9%;font-size:47px;animation:uniFloat 3.5s ease-in-out infinite reverse}.uni-star{position:absolute;color:#c5f2ff;font-size:35px;animation:uniTwinkle 1.8s infinite alternate}.uni-star.s1{top:12%;left:20%}.uni-star.s2{bottom:15%;right:16%;animation-delay:.7s}
+.uni-section-head{max-width:1180px;margin:38px auto 18px;display:flex;align-items:end;justify-content:space-between;gap:20px}.uni-section-head span{color:#9edfff;font-weight:850;font-size:10px;letter-spacing:3px}.uni-section-head h2{margin:5px 0;font-size:clamp(23px,3vw,32px)}.uni-section-head p{color:#b9c9e1;font-size:13px}.uni-courses{max-width:1180px;margin:auto;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px}.uni-course{min-height:180px;text-align:left;display:flex;flex-direction:column;align-items:flex-start;padding:22px;border-radius:22px;border:1px solid #ffffff1c;color:white;cursor:pointer;transition:transform .25s,box-shadow .25s,border-color .25s;background:#ffffff0b}.uni-course:hover{transform:translateY(-7px);box-shadow:0 18px 35px #0003;border-color:#a6e4ff88}.uni-course>span{font-size:31px;margin-bottom:16px}.uni-course b{font-size:18px}.uni-course small{color:#c1d0e5;margin-top:7px}.uni-course i{font-style:normal;color:#a4e5ff;font-size:12px;font-weight:800;margin-top:auto;padding-top:20px}.uni-course.math{background:linear-gradient(145deg,#3156a555,#ffffff08)}.uni-course.science{background:linear-gradient(145deg,#167c7b55,#ffffff08)}.uni-course.turkish{background:linear-gradient(145deg,#8d4eaa55,#ffffff08)}.uni-course.english{background:linear-gradient(145deg,#a66b2e55,#ffffff08)}
+.uni-lesson{max-width:1180px;margin:20px auto;padding:25px;border:1px solid #ffffff25;border-radius:22px;background:#ffffff0d;animation:uniRise .4s both}.uni-lesson h3{margin-top:0;font-size:24px}.uni-lesson p{line-height:1.7;color:#d6e3f5}.uni-lesson button{margin:8px 8px 0 0}.uni-footer{max-width:1180px;margin:35px auto 0;text-align:center;color:#8ea5c6;font-size:12px;letter-spacing:1px}.uni-footer span{color:#75d5ff;margin:0 8px}
+@media(max-width:760px){.uni-hero{grid-template-columns:1fr}.uni-hero-art{min-height:150px;grid-row:1}.uni-book{font-size:100px}.uni-hero-copy{grid-row:2}.uni-courses{grid-template-columns:repeat(2,minmax(0,1fr))}.uni-section-head{align-items:start;flex-direction:column;gap:2px}.uni-section-head p{margin-top:0}.uni-top{flex-wrap:wrap}.uni-back{font-size:12px;padding:10px 12px}.uni-course{min-height:165px;padding:17px}}
+@media(max-width:390px){.uni-courses{grid-template-columns:1fr}.uni-course{min-height:140px}.uni-title{letter-spacing:1px}}
+@media(prefers-reduced-motion:reduce){.uni-intro-content,.uni-cap,.uni-title,.uni-orbit,.uni-stars i,.uni-progress span,.uni-book,.uni-planet,.uni-pencil,.uni-sweep,.uni-intro:before{animation-duration:.01ms!important;animation-iteration-count:1!important}}
+
+
+/* MEBA ÜNİVERSİTESİ özel kimlik ekranı, takvim ve ders videosu */
+.uni-login-screen{position:fixed;inset:0;z-index:1600;display:grid;grid-template-columns:minmax(0,1fr) minmax(320px,460px);gap:clamp(20px,5vw,70px);align-items:center;padding:clamp(22px,5vw,70px);color:#f5fbff;background:radial-gradient(ellipse at 18% 20%,#147ad955,transparent 42%),radial-gradient(ellipse at 85% 80%,#397dff44,transparent 40%),linear-gradient(135deg,#04152f,#092b59 55%,#06152e);overflow:auto}
+.uni-login-screen:before{content:"";position:absolute;inset:-30%;pointer-events:none;background:repeating-radial-gradient(ellipse at 50% 50%,transparent 0 75px,#6bd8ff12 77px 79px);animation:uniNebula 26s linear infinite}
+.uni-login-brand,.uni-login-card{position:relative;z-index:1}.uni-login-brand{text-align:center;padding:25px}.uni-login-brand .edu-logos{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;font-size:clamp(35px,5vw,62px);margin-bottom:22px}.edu-logos span{display:grid;place-items:center;width:78px;height:78px;border:1px solid #91ddff55;border-radius:24px;background:linear-gradient(145deg,#ffffff20,#ffffff05);box-shadow:0 0 35px #35b9ff24;animation:uniFloat 3.5s ease-in-out infinite}.edu-logos span:nth-child(2){animation-delay:-1.1s}.edu-logos span:nth-child(3){animation-delay:-2.2s}.uni-login-brand h1{font-size:clamp(34px,6vw,70px);line-height:1.02;margin:0;background:linear-gradient(90deg,#fff,#8eeaff,#dceaff);color:transparent;-webkit-background-clip:text;background-clip:text;text-shadow:0 0 30px #43aaff25}.uni-login-brand p{font-size:clamp(14px,2vw,21px);letter-spacing:2px;color:#b9e8ff}.uni-login-brand .v55{display:inline-block;margin-top:18px;padding:9px 17px;border:1px solid #82d9ff66;border-radius:999px;background:#69cfff12;font-weight:900;letter-spacing:3px}
+.uni-login-card{width:100%;padding:clamp(24px,4vw,40px);border:1px solid #8edbff55;border-radius:28px;background:linear-gradient(145deg,#ffffff19,#ffffff08);box-shadow:0 28px 90px #0005,0 0 40px #36aaff18;backdrop-filter:blur(18px)}.uni-login-card h2{font-size:28px;margin:0 0 8px}.uni-login-card .sub{color:#b9d9f5;line-height:1.6;margin:0 0 22px}.uni-login-card label{display:block;margin:16px 0 8px;color:#d7efff;font-weight:800}.uni-login-card input{width:100%;padding:14px 15px;border:1px solid #8acfff55;border-radius:13px;background:#03152e99;color:white;outline:none}.uni-login-card input:focus{border-color:#80e4ff;box-shadow:0 0 0 4px #4bbcff20}.uni-login-submit{width:100%;margin-top:22px;background:linear-gradient(100deg,#147de0,#28c6ef);box-shadow:0 10px 30px #129fff40}.uni-login-error{min-height:20px;color:#ffb8c0;font-size:13px;margin-top:8px}.uni-login-back{display:block;width:100%;margin-top:12px;background:transparent;border:0;color:#bfeaff;padding:10px;cursor:pointer}
+.uni-preparing{position:fixed;inset:0;z-index:1700;display:grid;place-items:center;text-align:center;color:white;background:radial-gradient(ellipse at center,#124f93,#06152f 70%)}.uni-preparing .spin{font-size:70px;animation:uniCapBlast 1.3s infinite}.uni-preparing h2{font-size:clamp(24px,5vw,42px);margin:18px}.uni-preparing p{color:#c8e9ff}.uni-preparing .uni-progress{margin-top:24px}
+.uni-dashboard-tools{max-width:1180px;margin:22px auto;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(260px,.9fr);gap:16px}.uni-panel{border:1px solid #ffffff24;border-radius:22px;padding:22px;background:linear-gradient(145deg,#ffffff12,#ffffff06);box-shadow:0 12px 35px #0002}.uni-panel h3{margin:0 0 14px}.uni-calendar-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.uni-calendar-head button{border:1px solid #ffffff25;border-radius:10px;background:#ffffff12;color:white;padding:8px 12px;cursor:pointer}.uni-calendar-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;margin-top:12px}.uni-calendar-grid span{min-height:34px;display:grid;place-items:center;border-radius:9px;background:#ffffff08;color:#d6eaff;font-size:13px}.uni-calendar-grid .day{font-weight:900;color:#8ddfff;background:#ffffff12}.uni-calendar-grid .today{background:linear-gradient(135deg,#167ee9,#31c5ef);color:white;box-shadow:0 0 18px #30baff55}.uni-calendar-grid .empty{background:transparent}.uni-today-note{font-size:12px;color:#b6d5f1;margin-top:12px}.uni-video-stage{min-height:190px;display:grid;place-items:center;position:relative;overflow:hidden;border-radius:18px;background:radial-gradient(circle at 50% 40%,#1b78b9,#071a42 72%);border:1px solid #8bdcff40}.uni-video-stage .scene-icon{font-size:65px;filter:drop-shadow(0 8px 18px #45caff66);animation:uniFloat 2.5s ease-in-out infinite}.uni-video-stage .scene-caption{font-size:15px;font-weight:850;text-align:center;margin:8px 12px;color:#e8f8ff}.uni-video-stage .scene-orbit{position:absolute;width:155px;height:80px;border:1px solid #a2edff88;border-radius:50%;animation:uniOrbit 5s linear infinite}.uni-video-stage .scene-orbit:after{content:"✦";position:absolute;top:0;left:50%;color:#fff}.uni-video-controls{display:flex;flex-wrap:wrap;gap:9px;margin-top:12px}.uni-video-controls button{border:1px solid #ffffff30;border-radius:12px;background:#ffffff12;color:white;padding:10px 13px;cursor:pointer}.uni-video-controls button.primary{background:linear-gradient(100deg,#137fe5,#2bc8ef);border:0}.uni-video-status{color:#bfe8ff;font-size:13px;margin-top:10px;line-height:1.6}.uni-focus{outline:2px solid #7eeaff;box-shadow:0 0 35px #2bbcff66!important}
+@media(max-width:760px){.uni-login-screen{grid-template-columns:1fr;gap:8px;align-content:center;padding:18px}.uni-login-brand{padding:4px}.uni-login-brand .edu-logos{font-size:35px;margin-bottom:10px}.edu-logos span{width:52px;height:52px;border-radius:15px}.uni-login-brand h1{font-size:34px}.uni-login-brand p{font-size:11px;margin:8px}.uni-login-brand .v55{margin-top:5px;padding:6px 12px}.uni-login-card{max-width:480px;margin:auto;padding:22px}.uni-dashboard-tools{grid-template-columns:1fr}.uni-calendar-grid span{min-height:30px}}
+
+
+/* V5.5 fix: reliable university login + richer animated lesson scenes */
+.uni-video-stage{isolation:isolate;min-height:250px;transition:background .5s ease}
+.uni-video-stage:before,.uni-video-stage:after{content:"";position:absolute;inset:auto;z-index:0;pointer-events:none}
+.uni-video-stage:before{width:240px;height:240px;border:1px solid #78dfff55;border-radius:50%;animation:uniPulseRing 4s ease-in-out infinite}
+.uni-video-stage:after{width:180%;height:2px;left:-40%;top:48%;background:linear-gradient(90deg,transparent,#9af2ff,transparent);transform:rotate(-18deg);animation:uniLightSweep 3.5s linear infinite}
+.uni-video-stage .scene-icon{position:relative;z-index:2;font-size:76px;animation:uniLessonFloat 2.2s ease-in-out infinite;transform-origin:center}
+.uni-video-stage .scene-caption,.uni-video-stage .scene-orbit{z-index:2;position:relative}
+.uni-scene-particles{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:1}
+.uni-scene-particles span{position:absolute;display:block;font-size:20px;animation:uniParticleRise 4s linear infinite;opacity:0}
+.uni-scene-particles span:nth-child(1){left:10%;bottom:8%;animation-delay:0s}
+.uni-scene-particles span:nth-child(2){left:28%;bottom:4%;animation-delay:.8s}
+.uni-scene-particles span:nth-child(3){left:70%;bottom:6%;animation-delay:1.5s}
+.uni-scene-particles span:nth-child(4){left:88%;bottom:10%;animation-delay:2.2s}
+.uni-scene-particles span:nth-child(5){left:52%;bottom:3%;animation-delay:2.8s}
+.uni-video-stage.is-playing .scene-icon{animation:uniLessonPop .75s cubic-bezier(.2,.8,.2,1) both,uniLessonFloat 2.2s ease-in-out .75s infinite}
+.uni-video-stage.is-playing .scene-orbit{animation-duration:1.6s}
+.uni-video-stage.is-playing{background:radial-gradient(circle at 50% 40%,#168fda,#07143d 72%)}
+.uni-video-progress{height:5px;border-radius:99px;overflow:hidden;background:#ffffff20;margin-top:12px}
+.uni-video-progress span{display:block;width:0;height:100%;border-radius:inherit;background:linear-gradient(90deg,#48a9ff,#7df4ff);box-shadow:0 0 14px #6de8ff;transition:width .45s ease}
+.uni-video-status{min-height:42px}
+.uni-login-submit{cursor:pointer;position:relative;z-index:5;pointer-events:auto}
+@keyframes uniPulseRing{0%,100%{transform:scale(.82);opacity:.3}50%{transform:scale(1.08);opacity:.9}}
+@keyframes uniLightSweep{0%{transform:translateX(-28%) rotate(-18deg);opacity:0}25%{opacity:.8}100%{transform:translateX(28%) rotate(-18deg);opacity:0}}
+@keyframes uniLessonFloat{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-10px) rotate(3deg)}}
+@keyframes uniLessonPop{0%{transform:scale(.25) rotate(-24deg);opacity:0;filter:blur(5px)}65%{transform:scale(1.18) rotate(7deg);opacity:1;filter:blur(0)}100%{transform:scale(1) rotate(0)}}
+@keyframes uniParticleRise{0%{transform:translateY(24px) scale(.5) rotate(0);opacity:0}20%{opacity:.9}100%{transform:translateY(-230px) scale(1.3) rotate(160deg);opacity:0}}
+@media(max-width:700px){.uni-video-stage{min-height:220px}.uni-video-stage .scene-icon{font-size:64px}}
+
+
+.eba-lesson-modal{position:fixed;inset:0;z-index:2500;display:grid;place-items:center;padding:18px;background:rgba(1,7,24,.84);backdrop-filter:blur(12px)}
+.eba-lesson-modal.hid{display:none!important}.eba-lesson-card{width:min(100%,980px);max-height:94vh;overflow:auto;border:1px solid #68d9ff88;border-radius:24px;background:linear-gradient(145deg,#071a3b,#0a2c5b 58%,#07152e);box-shadow:0 0 60px #16b9ff30;color:#fff}
+.eba-lesson-head{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:20px 22px;border-bottom:1px solid #ffffff18}.eba-label{font-size:11px;letter-spacing:.18em;color:#7be8ff;font-weight:800}.eba-lesson-head h2{margin:6px 0 0;font-size:clamp(20px,3vw,29px)}
+.eba-close{width:42px;height:42px;border-radius:14px;border:1px solid #ffffff30;background:#ffffff12;color:white;font-size:20px;cursor:pointer}.eba-player-wrap{background:#020817;padding:12px}.eba-player-wrap iframe{display:block;width:100%;height:min(60vh,560px);min-height:270px;border:0;border-radius:14px;background:#061127}
+.eba-frame-note{padding:10px 4px 2px;color:#b8d6f7;font-size:13px}.eba-lesson-actions{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:16px 22px 22px;color:#9bbfe8;font-size:13px}
+.eba-open-external{display:inline-flex;align-items:center;justify-content:center;padding:13px 19px;border-radius:13px;text-decoration:none;color:#04162b;font-weight:900;background:linear-gradient(100deg,#75eaff,#4d9dff);box-shadow:0 0 22px #55caff40}body.eba-modal-open{overflow:hidden}
+@media(max-width:600px){.eba-lesson-modal{padding:8px}.eba-lesson-card{border-radius:17px}.eba-lesson-head{padding:15px}.eba-player-wrap{padding:8px}.eba-player-wrap iframe{min-height:240px;height:48vh}.eba-lesson-actions{padding:13px 15px 17px}}
+
+</style>
+<style id="mebaBakimMode">
+</style>
+
+</head><body>
+
+
+<div class="blob"></div><div class="blob"></div><div class="blob"></div>
+
+<div id="toast" class="glass"></div>
+
+<!-- ORTADAN BÜYÜYEN İNTRO EKRANI -->
+<div id="mebaIntro">
+  <div class="intro-stage">
+    <div class="intro-family">👨‍👩‍👧‍👦</div>
+    <div class="intro-welcome">
+      <div>
+        <h1>Hoş Geldiniz!</h1>
+        <span class="v">MEBA V4.0</span>
+      </div>
+    </div>
+    <div class="intro-info">
+      <div class="inner">
+        <div class="bigmark">MEBA</div>
+        <h2>Aile Birliği</h2>
+        <p>V4.0 · Güvenli ve hızlı giriş yapın.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- GİRİŞ EKRANI -->
+<div id="login">
+ <div class="left">
+   <div class="mark">MEBA</div>
+   <!-- GİRİŞ EKRANI SOL TARAFINDAKİ AİLE EMOJİSİ -->
+   <div class="fam">👨‍👩‍👧‍👦</div>
+   <h2>Hoş Geldiniz!</h2>
+   <p>Aile Birliği · V.3.0<br>Güvenli ve hızlı giriş yapın.</p>
+ </div>
+ <div class="glass lcard right-card">
+  <label>Kimlik</label><input id="kimlik" placeholder="MEBA kullanıcı adınızı giriniz" autocomplete="off">
+  <label>Şifre</label><div class="pw"><input id="sifre" type="password" placeholder="Şifre"><span id="eyeBtn">👁</span></div>
+  <div class="err" id="e1"></div>
+  <button class="btn" style="width:100%" id="btnGiris">Giriş Yap</button>
+  <button class="btn g" style="width:100%;margin-top:14px" id="btnIsnames">💼 MEBA İŞNAMES GİRİŞİ</button>
+  <button class="btn g" style="width:100%;margin-top:12px" id="btnUniversite">🎓 MEBA ÜNİVERSİTESİ</button>
+  <div style="height:12px"></div><button class="btn g" style="width:100%" id="btnToggleAdm">🛡 YÖNETİCİ GİRİŞİ</button>
+  <div id="ad" class="hid" style="margin-top:12px"><div class="row" style="flex-wrap:nowrap"><input id="asifre" type="password" placeholder="Yönetici şifresi"><button class="btn" style="flex:none;min-width:0" id="btnAdmGiris">Aç</button></div><div class="err" id="e2"></div></div>
+ </div>
+</div>
+
+<!-- MEBA İŞNAMES özel giriş ekranı -->
+<div id="isnamesIntro" class="isn-intro hid" aria-label="MEBA İşnames açılış introsu">
+ <div class="isn-orbit orbit-a"></div><div class="isn-orbit orbit-b"></div>
+ <div class="isn-intro-content"><div class="isn-business-icon">💼</div><div class="isn-intro-title">MEBA İŞNAMES</div><div class="isn-intro-sub">İŞİN BİR ÜST VERSİYONU</div><div class="isn-version">V5.5</div></div>
+</div>
+<section id="isnamesLogin" class="isn-login hid">
+ <div class="isn-brand"><div class="isn-logo">💼</div><div class="isn-brand-title">MEBA İŞNAMES</div><div class="isn-tagline">İŞİN BİR ÜST VERSİYONU</div><div class="isn-version-pill">SÜRÜM 5.5</div></div>
+ <div class="glass isn-card"><div class="isn-card-head"><span class="isn-lock">🔐</span><h2>İşnames Girişi</h2><p>Devam etmek için kimliğini ve PIN kodunu gir.</p></div>
+  <label for="isnKimlik">Kimlik</label><input id="isnKimlik" value="" placeholder="ALPER ASLAN" autocomplete="username">
+  <label for="isnPin">PIN KODU</label><div class="isn-pin-wrap"><input id="isnPin" type="password" inputmode="numeric" maxlength="4" placeholder="4 haneli PIN" autocomplete="current-password"><button type="button" id="isnEye" aria-label="PIN'i göster">👁</button></div>
+  <div id="isnError" class="err" role="status"></div><button class="btn isn-submit" id="isnSubmit" type="button">Giriş Yap <span>→</span></button>
+  <div class="isn-admin-access"><button class="btn g" id="isnAdminToggle" type="button" style="width:100%;margin-top:12px">🛡 Yönetici Paneli</button>
+   <div id="isnAdminBox" class="hid" style="margin-top:12px;text-align:left"><label for="isnAdminPass">Yönetici şifresi</label><div class="isn-pin-wrap"><input id="isnAdminPass" type="password" placeholder="Yönetici şifresini gir" autocomplete="current-password"><button type="button" id="isnAdminEye" aria-label="Şifreyi göster">👁</button></div><div id="isnAdminError" class="err" role="status"></div><button class="btn isn-submit" id="isnAdminSubmit" type="button">Yönetici olarak giriş <span>→</span></button></div>
+  </div>
+  <button class="isn-back" id="isnBack" type="button">← MEBA girişine dön</button>
+ </div>
+</section>
+
+<!-- MEBA ÜNİVERSİTESİ: eğitim temalı açılış ve karşılama -->
+<div id="uniIntro" class="uni-intro hid" aria-label="MEBA Üniversitesi açılış introsu">
+ <div class="uni-stars" aria-hidden="true"><i>✦</i><i>＋</i><i>✧</i><i>✦</i><i>＋</i><i>✧</i></div>
+ <div class="uni-orbit uni-orbit-one"></div><div class="uni-orbit uni-orbit-two"></div><div class="uni-sweep"></div>
+ <div class="uni-intro-content">
+  <div class="uni-cap">🎓</div><div class="uni-kicker">BİLGİYLE GELECEĞE</div>
+  <div class="uni-title">MEBA <span>ÜNİVERSİTESİ</span></div>
+  <p class="uni-subtitle">Merak et · Keşfet · Öğren · Başar</p>
+  <div class="uni-progress"><span></span></div><div class="uni-loading">ÖĞRENME EVRENİ HAZIRLANIYOR</div>
+ </div>
+ <div class="uni-bottom-glow"></div>
+</div>
+<section id="uniLoginScreen" class="uni-login-screen hid" aria-label="MEBA Üniversitesi giriş ekranı">
+ <div class="uni-login-brand"><div class="edu-logos" aria-label="Eğitim logoları"><span>🎓</span><span>📘</span><span>🧪</span></div><h1>MEBA<br>ÜNİVERSİTESİ</h1><p>EĞİTİMİN BİR ÜST KATI</p><div class="v55">SÜRÜM: 5.5</div></div>
+ <form class="uni-login-card" id="uniLoginForm" onsubmit="return submitUniLogin(event)"><div style="font-size:30px;margin-bottom:10px">🔐</div><h2>Üniversite Girişi</h2><p class="sub">Kişisel eğitim alanına erişmek için giriş yap.</p><label for="uniIdentity">Kimlik</label><input id="uniIdentity" autocomplete="username" placeholder="Kimliğinizi giriniz" value="HANDAN ASLAN" required><label for="uniPassword">Şifre</label><input id="uniPassword" type="password" autocomplete="current-password" placeholder="Şifrenizi giriniz" required><div id="uniLoginError" class="uni-login-error" role="status"></div><button class="btn uni-login-submit" type="submit">Giriş Yap&nbsp; →</button><button class="uni-login-back" id="uniLoginBack" type="button">← MEBA giriş seçeneklerine dön</button></form>
+</section>
+<div id="uniPreparing" class="uni-preparing hid"><div><div class="spin">🎓</div><h2>MEBA Üniversiteniz hazırlanıyor</h2><p>Lütfen bekleyiniz… Dersleriniz ve takviminiz açılıyor.</p><div class="uni-progress"><span></span></div></div></div>
+<section id="uniHome" class="uni-home hid">
+ <header class="uni-top"><div class="uni-mini-cap">🎓</div><div><div class="uni-eyebrow">BİLGİYLE GELECEĞE</div><h1>MEBA Üniversitesi</h1></div><button class="btn g uni-back" id="uniBack">← Giriş ekranı</button></header>
+ <div class="uni-hero"><div class="uni-hero-copy"><span class="uni-pill">✨ ÖĞRENME YOLCULUĞUN BAŞLIYOR</span><h2>Bugün yeni bir şey<br><em>öğrenmeye hazır mısın?</em></h2><p>Her büyük keşif, merak ettiğin küçük bir soruyla başlar.</p><button class="btn uni-start" id="uniStart">🚀 Öğrenmeye Başla</button></div><div class="uni-hero-art" aria-hidden="true"><div class="uni-book">📚</div><div class="uni-planet">🌐</div><div class="uni-pencil">✏️</div><div class="uni-star s1">✦</div><div class="uni-star s2">✧</div></div></div>
+ <div class="uni-dashboard-tools">
+  <section class="uni-panel"><div class="uni-calendar-head"><h3>🗓️ Eğitim Takvimi</h3><div><button id="uniPrevMonth" type="button" aria-label="Önceki ay">‹</button> <button id="uniNextMonth" type="button" aria-label="Sonraki ay">›</button></div></div><div id="uniCalendarLabel" style="font-weight:850;color:#9ee6ff"></div><div id="uniCalendarGrid" class="uni-calendar-grid"></div><div class="uni-today-note">Bugün için planını seç ve öğrenmeye devam et.</div></section>
+  <section class="uni-panel"><h3>▶ Eğitim Videosu</h3><div class="uni-video-stage" id="uniVideoStage"><div class="uni-scene-particles" aria-hidden="true"><span>✦</span><span>✧</span><span>✦</span><span>✧</span><span>★</span></div><div class="scene-orbit"></div><div><div class="scene-icon" id="uniSceneIcon">➗</div><div class="scene-caption" id="uniSceneCaption">Matematik: Sayıları keşfet</div></div></div><div class="uni-video-progress" aria-label="Ders ilerlemesi"><span id="uniVideoProgress"></span></div><div class="uni-video-controls><button type="button" class="primary" id="uniVideoPlay">▶ Videoyu oynat</button><button type="button" id="uniVideoNext">Sonraki bölüm ↗</button></div><div class="uni-video-status" id="uniVideoStatus">Kısa, animasyonlu ders anlatımı hazır. Oynat düğmesine bas.</div></section>
+ </div>
+ <div class="uni-section-head"><div><span>KEŞFET</span><h2>Öğrenme alanları</h2></div><p>Bir alan seç ve keşfe başla.</p></div>
+ <div class="uni-courses"><button class="uni-course math" data-course="matematik"><span>➗</span><b>Matematik</b><small>Problemler ve mantık</small><i>Keşfet →</i></button><button class="uni-course science" data-course="fen"><span>🧪</span><b>Fen Bilimleri</b><small>Doğa ve keşifler</small><i>Keşfet →</i></button><button class="uni-course turkish" data-course="turkce"><span>📖</span><b>Türkçe</b><small>Kelimeler ve anlatım</small><i>Keşfet →</i></button><button class="uni-course english" data-course="ingilizce"><span>🌍</span><b>İngilizce</b><small>Yeni kelimeler öğren</small><i>Keşfet →</i></button></div>
+ <div id="uniLesson" class="uni-lesson hid"></div>
+ <footer class="uni-footer">MEBA ÜNİVERSİTESİ <span>•</span> Merakın, en güçlü başlangıcın.</footer>
+</section>
+
+<div id="admin" class="wrap hid"><h1>Hoş geldiniz <b>TİMUR EGE ASLAN</b></h1><div id="cl2" style="opacity:.85;margin:-8px 0 14px"></div><div id="av"></div></div>
+
+<div id="app" class="hid">
+ <div class="glass rail"><div class="lg" id="appBrand">MEBA</div><div id="nav"></div><div style="flex:1"></div><button class="nv" onclick="cikis()"><span>⎋</span><b>Çıkış</b></button></div>
+ <div class="glass ban"><span>🚀</span>MEBA V4.0 yenileniyor! Yeni özellikler kısa süre içinde geliyor. <small id="cl" style="margin-left:auto;opacity:.8"></small></div>
+ <div id="pg"></div>
+ <button id="abotBtn" onclick="document.getElementById('abot').classList.toggle('hid')">✦</button>
+ <div id="abot" class="glass hid"><b>✦ ABOT · Yapay Zeka Asistanı</b><div id="msgs"></div>
+  <div class="row" style="flex-wrap:nowrap;margin-top:8px"><input id="q" placeholder="ABOT'a sor…" onkeydown="if(event.key==='Enter')sor()"><button class="btn" style="flex:none;min-width:0;padding:12px 16px" onclick="sor()">➤</button></div></div>
+</div>
+
+<div id="ebaLessonModal" class="eba-lesson-modal hid" role="dialog" aria-modal="true" aria-labelledby="ebaLessonTitle">
+ <div class="eba-lesson-card">
+  <div class="eba-lesson-head"><div><span class="eba-label">MEBA ÜNİVERSİTESİ · EĞİTİM VİDEOSU</span><h2 id="ebaLessonTitle">Ders videosu</h2></div><button type="button" id="ebaLessonClose" class="eba-close" aria-label="Videoyu kapat">✕</button></div>
+  <div class="eba-player-wrap"><iframe id="ebaLessonFrame" title="EBA ders videosu" src="about:blank" allow="fullscreen; autoplay; encrypted-media; picture-in-picture" allowfullscreen loading="lazy"></iframe><div class="eba-frame-note">EBA videosu bu pencerede görüntülenmezse aşağıdaki düğmeyle resmî EBA sayfasında açabilirsin.</div></div>
+  <div class="eba-lesson-actions"><a id="ebaLessonExternal" class="eba-open-external" href="https://eba.gov.tr/" target="_blank" rel="noopener noreferrer">▶ EBA'da izle</a><span>Resmî EBA içeriği</span></div>
+ </div>
+</div>
+
+<script>
+// OTOMATİK İNTRO AKIŞI ANİMASYONU
+window.addEventListener("DOMContentLoaded", () => {
+  // 1. Yazılar ortadan büyüyerek sırayla geçer (toplam ~4.3sn)
+  setTimeout(() => {
+    // İntro perdesini yumuşakça kapat
+    const intro = document.getElementById("mebaIntro");
+    if(intro) intro.classList.add("hide");
+
+    // Giriş ekranı normal şekilde görünür
+    const login = document.getElementById("login");
+    if(login) login.style.display = "grid";
+    setTimeout(()=>{ if(login) login.classList.add("left-in"); }, 50);
+    setTimeout(()=>{ if(login) login.classList.add("form-in"); }, 650);
+
+  }, 4300);
+});
+
+const DEFU={ALPER:{ad:"ALPER ASLAN",pass:"789456123"},HANDAN:{ad:"HANDAN ASLAN",pass:"123456789"}},APASS="20262808";let UYE={},UPASS={};
+function syncUsers(){if(!S.users||!Object.keys(S.users).length)S.users=JSON.parse(JSON.stringify(DEFU));if(!S.exp)S.exp={};UYE={};UPASS={};Object.entries(S.users).forEach(([k,u])=>{UYE[k]=u.ad;UPASS[k]=u.pass;if(!S.tiers[k])S.tiers[k]="UCRETSIZ"})}
+const TIER={UCRETSIZ:{ad:"Ücretsiz",fiyat:"0₺",lim:3},ABONMAN:{ad:"Abonman",fiyat:"50₺ / 2 aylık",lim:99},PLUS:{ad:"Plus",fiyat:"60₺ / 2,5 aylık",lim:99}};
+let S={tiers:{ALPER:"ABONMAN",HANDAN:"PLUS"},shop:[],todo:[]};try{const z=JSON.parse(localStorage.getItem("meba-s"));if(z&&z.tiers)S=Object.assign(S,z)}catch(e){}
+syncUsers();
+let pstart=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
+function bitTxt(){const e=bitisHesapla(pstart,pend);return e?"Bitiş: "+fmt(e)+" ("+(pend==="PLUS"?"2,5 ay":"2 ay")+" sonra, o gün Ücretsiz'e düşer)":""}
+let ref=null,me=null,sayfa="ana",off=0,sel=0,pend=null,anim=true,sh=0,smsSecili=null;
+const $=i=>document.getElementById(i);let tt;function toast(m){const t=$("toast");if(!t)return;t.textContent=m;t.classList.add("on");clearTimeout(tt);tt=setTimeout(()=>t.classList.remove("on"),4500)}
+const norm=s=>(s||"").toLocaleLowerCase("tr").replace(/ı/g,"i").normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/\s+/g,"");
+const cur=()=>(document.body.className.match(/t\d/)||[""])[0];
+function theme(t,s){document.body.className=(t||"")+(s?" sharp":"");try{localStorage.setItem("meba-th",JSON.stringify([t,s]))}catch(e){}}
+try{const x=JSON.parse(localStorage.getItem("meba-th"));if(x){sh=x[1];theme(x[0],x[1])}}catch(e){}
+
+const DAY=86400000;
+function bitisHesapla(str,t){const p=(str||"").split("-").map(Number);if(p.length<3||!p[0])return 0;const d=new Date(p[0],p[1]-1,p[2]);d.setMonth(d.getMonth()+2);if(t==="PLUS")d.setDate(d.getDate()+15);return d.getTime()}
+const fmt=ms=>new Date(ms).toLocaleDateString("tr-TR",{day:"numeric",month:"long",year:"numeric"});
+function kalanTxt(k){const t=S.tiers[k];if(t==="UCRETSIZ")return"";const e=S.exp&&S.exp[k];if(!e)return"süre sınırı yok";const d=Math.max(1,Math.ceil((e-Date.now())/DAY));return d+" gün kaldı · bitiş: "+fmt(e)}
+function sweep(){let ch=false;if(!S.exp)S.exp={};Object.keys(UYE).forEach(k=>{if(S.tiers[k]!=="UCRETSIZ"&&S.exp[k]&&Date.now()>=S.exp[k]){S.tiers[k]="UCRETSIZ";delete S.exp[k];ch=true}});if(ch){save();toast("⏰ Süresi dolan üyelerin paketi Ücretsiz'e düşer.")}return ch}
+setInterval(()=>{if(sweep()){if(me)draw();else if(!$("admin").classList.contains("hid"))show()}},30000);
+function loc(){try{localStorage.setItem("meba-s",JSON.stringify(S))}catch(e){}}
+function save(){loc();if(ref)return ref.set(S).catch(()=>toast("⚠ Buluta yazılamadı"))}
+function bad(id,m){const el=$(id);if(!el)return;el.textContent=m;const c=el.parentElement;if(c){c.classList.remove("shake");void c.offsetWidth;c.classList.add("shake")}}
+
+function giris(){
+ const kInp=$("kimlik");const pInp=$("sifre");if(!kInp||!pInp)return;
+ const kVal=kInp.value,pVal=pInp.value;
+ const k=Object.keys(UYE).find(x=>norm(UYE[x])===norm(kVal)||norm(x)===norm(kVal));
+ if(k&&pVal===UPASS[k]){me=k;sayfa="ana";anim=true;$("login").classList.add("hid");$("app").classList.remove("hid");draw();return}
+ if(pVal===APASS){admOpen();return}
+ bad("e1",k?"Şifre yanlış.":"Kimlik bulunamadı. (ALPER ASLAN / HANDAN ASLAN)")
+}
+function admGiris(){const aInp=$("asifre");if(!aInp)return;if(aInp.value===APASS)admOpen();else bad("e2","Şifre yanlış.")}
+function admOpen(){sweep();$("login").classList.add("hid");$("admin").classList.remove("hid");show()}
+function cikis(){me=null;document.body.classList.remove("isnames-mode");["admin","app"].forEach(i=>{const el=$(i);if(el)el.classList.add("hid")});$("login").classList.remove("hid");["kimlik","sifre","asifre"].forEach(i=>{const el=$(i);if(el)el.value=""});if($("e1"))$("e1").textContent="";if($("e2"))$("e2").textContent=""}
+
+document.addEventListener("DOMContentLoaded",()=>{
+ const eye=$("eyeBtn");if(eye){eye.onclick=()=>{const s=$("sifre");if(s)s.type=s.type==='password'?'text':'password'}}
+ const sInp=$("sifre");if(sInp){sInp.onkeydown=e=>{if(e.key==='Enter')giris()}}
+ const btnG=$("btnGiris");if(btnG){btnG.onclick=giris}
+ const btnT=$("btnToggleAdm");if(btnT){btnT.onclick=()=>{const ad=$("ad");if(ad)ad.classList.toggle("hid")}}
+ const isnButton=$("btnIsnames");if(isnButton)isnButton.onclick=openIsnames;
+ const uniButton=$("btnUniversite");if(uniButton)uniButton.onclick=openUniversite;
+ const uniBack=$("uniBack");if(uniBack)uniBack.onclick=closeUniversite;
+ const uniForm=$("uniLoginForm");if(uniForm)uniForm.onsubmit=submitUniLogin; const uniSubmit=uniForm?uniForm.querySelector(".uni-login-submit"):null;if(uniSubmit)uniSubmit.onclick=(e)=>{e.preventDefault();submitUniLogin(e)};
+ const uniLoginBack=$("uniLoginBack");if(uniLoginBack)uniLoginBack.onclick=closeUniversite;
+ const uniVideoPlay=$("uniVideoPlay");if(uniVideoPlay)uniVideoPlay.onclick=playUniVideo;
+ const uniVideoNext=$("uniVideoNext");if(uniVideoNext)uniVideoNext.onclick=nextUniVideo;
+ const uniPrev=$("uniPrevMonth");if(uniPrev)uniPrev.onclick=()=>{uniMonth.setMonth(uniMonth.getMonth()-1);renderUniCalendar()};
+ const uniNext=$("uniNextMonth");if(uniNext)uniNext.onclick=()=>{uniMonth.setMonth(uniMonth.getMonth()+1);renderUniCalendar()};
+ const uniStart=$("uniStart");if(uniStart)uniStart.onclick=()=>{const el=document.querySelector(".uni-dashboard-tools");if(el)el.scrollIntoView({behavior:"smooth",block:"center"});playUniVideo();const first=document.querySelector(".uni-course");if(first){first.classList.add("uni-focus");setTimeout(()=>first.classList.remove("uni-focus"),900)}};
+ document.querySelectorAll(".uni-course[data-course]").forEach((b)=>b.addEventListener("click",()=>openEbaLesson(b.dataset.course)));
+ 
+ const isnEye=$("isnEye");if(isnEye)isnEye.onclick=()=>{const x=$("isnPin");x.type=x.type==="password"?"text":"password"};
+ const isnSubmit=$("isnSubmit");if(isnSubmit)isnSubmit.onclick=submitIsnames;
+ const isnPin=$("isnPin");if(isnPin)isnPin.onkeydown=e=>{if(e.key==="Enter")submitIsnames()};
+ const isnKimlik=$("isnKimlik");if(isnKimlik)isnKimlik.onkeydown=e=>{if(e.key==="Enter")$("isnPin").focus()};
+ const isnBack=$("isnBack");if(isnBack)isnBack.onclick=closeIsnames;
+ const isnAdminToggle=$("isnAdminToggle");if(isnAdminToggle)isnAdminToggle.onclick=()=>{$("isnAdminBox").classList.toggle("hid");if(!$ ("isnAdminBox").classList.contains("hid"))$("isnAdminPass").focus()};
+ const isnAdminEye=$("isnAdminEye");if(isnAdminEye)isnAdminEye.onclick=()=>{const x=$("isnAdminPass");x.type=x.type==="password"?"text":"password"};
+ const isnAdminSubmit=$("isnAdminSubmit");if(isnAdminSubmit)isnAdminSubmit.onclick=isnamesAdminLogin;
+ const isnAdminPass=$("isnAdminPass");if(isnAdminPass)isnAdminPass.onkeydown=e=>{if(e.key==="Enter")isnamesAdminLogin()};
+
+ const aInp=$("asifre");if(aInp){aInp.onkeydown=e=>{if(e.key==='Enter')admGiris()}}
+ const btnAG=$("btnAdmGiris");if(btnAG){btnAG.onclick=admGiris}
+});
+
+// MEBA Üniversitesi açılış akışı ve etkileşimli örnek ders alanı.
+let uniTimer=null,uniPrepTimer=null,uniVideoTimer=null,uniVideoStep=0,uniMonth=new Date();
+function openUniversite(){
+ ["login","admin","app","isnamesLogin","isnamesIntro","uniHome","uniLoginScreen","uniPreparing"].forEach(id=>{const el=$(id);if(el)el.classList.add("hid")});
+ const intro=$("uniIntro");if(!intro)return;intro.classList.remove("hid","hide-uni");clearTimeout(uniTimer);
+ uniTimer=setTimeout(()=>{intro.classList.add("hide-uni");setTimeout(()=>{intro.classList.add("hid");intro.classList.remove("hide-uni");$("uniLoginScreen").classList.remove("hid");$("uniIdentity").focus()},700)},3900);
+}
+function closeUniversite(){clearTimeout(uniTimer);clearTimeout(uniPrepTimer);clearInterval(uniVideoTimer);["uniIntro","uniLoginScreen","uniPreparing","uniHome"].forEach(id=>{const el=$(id);if(el)el.classList.add("hid")});$("login").classList.remove("hid");$("login").style.display="grid"}
+function submitUniLogin(e){
+ if(e){e.preventDefault();e.stopPropagation()}
+ const identity=$("uniIdentity"),password=$("uniPassword"),err=$("uniLoginError");
+ if(!identity||!password||!err)return false;
+ const name=identity.value.trim().toUpperCase(),pass=password.value;
+ if(name!=="HANDAN ASLAN"||pass!=="2026"){
+  err.textContent="Kimlik veya şifre hatalı. Kimlik: HANDAN ASLAN · Şifre: 2026";
+  const card=$("uniLoginForm");if(card){card.classList.remove("shake");void card.offsetWidth;card.classList.add("shake")}
+  password.focus();return false;
+ }
+ err.textContent="";
+ $("uniLoginScreen").classList.add("hid");
+ $("uniPreparing").classList.remove("hid");
+ clearTimeout(uniPrepTimer);
+ uniPrepTimer=setTimeout(()=>{
+  $("uniPreparing").classList.add("hid");
+  $("uniHome").classList.remove("hid");
+  renderUniCalendar();renderUniVideo();
+ },2800);
+ return false;
+}
+function showUniLesson(key){
+ const data={
+  matematik:{title:"➗ Matematik · Mini meydan okuma",text:"Bir sepette 3 elma var. Sepete 2 elma daha koyarsan toplam kaç elman olur?",answers:["4 elma","5 elma","6 elma"],correct:1,why:"3 + 2 = 5. Harika! Sayıları birleştirerek toplamı buldun."},
+  fen:{title:"🧪 Fen Bilimleri · Doğayı keşfet",text:"Bitkilerin büyümesi için aşağıdakilerden hangisi en gerekli olanlardan biridir?",answers:["Güneş ışığı","Oyuncak","Müzik kutusu"],correct:0,why:"Doğru! Bitkiler ışığı kullanarak fotosentez yapar; su ve uygun koşullar da gerekir."},
+  turkce:{title:"📖 Türkçe · Kelime avı",text:"“Neşeli” kelimesine anlamca en yakın seçenek hangisidir?",answers:["Üzgün","Mutlu","Yorgun"],correct:1,why:"Evet! Neşeli, mutlu ve sevinçli olmaya yakın bir anlam taşır."},
+  ingilizce:{title:"🌍 İngilizce · İlk kelimen",text:"İngilizcede “book” kelimesinin Türkçe karşılığı nedir?",answers:["Kalem","Kitap","Masa"],correct:1,why:"Great! “Book” Türkçede “kitap” demektir."}
+ };
+ const d=data[key],box=$("uniLesson");if(!d||!box)return;
+ box.classList.remove("hid");box.innerHTML=`<h3>${d.title}</h3><p>${d.text}</p><div>${d.answers.map((a,i)=>`<button class="btn g" onclick="checkUniAnswer('${key}',${i})">${a}</button>`).join("")}</div><p id="uniAnswer" aria-live="polite"></p>`;
+ box.scrollIntoView({behavior:"smooth",block:"center"});
+}
+function checkUniAnswer(key,choice){const correct={matematik:1,fen:0,turkce:1,ingilizce:1};const msgs={matematik:"3 + 2 = 5. Harika! Sayıları birleştirerek toplamı buldun.",fen:"Doğru! Bitkiler ışığı kullanarak fotosentez yapar; su ve uygun koşullar da gerekir.",turkce:"Evet! Neşeli, mutlu ve sevinçli olmaya yakın bir anlam taşır.",ingilizce:"Great! “Book” Türkçede “kitap” demektir."};const el=$("uniAnswer");if(!el)return;el.textContent=choice===correct[key]?"🎉 Doğru cevap! "+msgs[key]:"💡 Bir kez daha düşün ve tekrar dene!";el.style.color=choice===correct[key]?"#9effd1":"#ffe1a8"}
+
+// MEBA Üniversitesi: eğitim takvimi ve animasyonlu mini ders videoları.
+const uniVideoLessons=[
+ {icon:"➗",title:"Matematik: Toplama",steps:["3 + 2 işlemini birlikte düşünelim.","Önce üç yıldız say: ⭐ ⭐ ⭐","İki yıldız daha ekle: ⭐ ⭐","Toplam beş yıldız! 3 + 2 = 5"]},
+ {icon:"🧪",title:"Fen: Bitkiler nasıl büyür?",steps:["Bir bitkinin büyümek için ışığa ihtiyacı vardır.","Kökleri suyu alır, yaprakları ışığı kullanır.","Işık, su ve uygun koşullar bitkinin gelişmesine yardım eder.","Bitkini gözlemle: yeni yapraklar çıkıyor mu?"]},
+ {icon:"📖",title:"Türkçe: Eş anlamlı kelimeler",steps:["Bazı kelimeler farklı yazılır ama benzer anlam taşır.","Örneğin: mutlu ve neşeli.","Cümle: Bugün çok neşeliyim!","Şimdi sen de mutlu kelimesiyle bir cümle kur."]},
+ {icon:"🌍",title:"İngilizce: İlk kelimeler",steps:["Hello, merhaba demektir.","Book, kitap demektir.","Sun, güneş demektir.","Birlikte söyle: Hello! Book! Sun!"]}
+];
+function renderUniVideo(){
+ const lesson=uniVideoLessons[uniVideoStep%uniVideoLessons.length];
+ const icon=$("uniSceneIcon"),caption=$("uniSceneCaption"),status=$("uniVideoStatus"),play=$("uniVideoPlay"),stage=$("uniVideoStage"),progress=$("uniVideoProgress");
+ if(icon)icon.textContent=lesson.icon;
+ if(caption)caption.textContent=lesson.title;
+ if(status)status.textContent="Bölüm hazır: "+lesson.steps[0]+" Oynat düğmesine bas.";
+ if(play)play.textContent="▶ Videoyu oynat";
+ if(progress)progress.style.width="0%";
+ if(stage)stage.classList.remove("is-playing");
+ clearInterval(uniVideoTimer);
+}
+function playUniVideo(){
+ clearInterval(uniVideoTimer);
+ const lesson=uniVideoLessons[uniVideoStep%uniVideoLessons.length];
+ let i=0;
+ const play=$("uniVideoPlay"),status=$("uniVideoStatus"),stage=$("uniVideoStage"),progress=$("uniVideoProgress"),icon=$("uniSceneIcon"),caption=$("uniSceneCaption");
+ if(!lesson||!status)return;
+ if(play)play.textContent="↻ Ders oynatılıyor…";
+ if(stage)stage.classList.add("is-playing");
+ const showStep=()=>{
+  if(i>=lesson.steps.length){
+   clearInterval(uniVideoTimer);
+   status.textContent="🎉 Ders tamamlandı! "+lesson.steps[lesson.steps.length-1];
+   if(play)play.textContent="▶ Tekrar oynat";
+   if(progress)progress.style.width="100%";
+   if(stage)stage.classList.remove("is-playing");
+   return;
+  }
+  status.textContent=(i+1)+" / "+lesson.steps.length+" · "+lesson.steps[i];
+  if(progress)progress.style.width=((i+1)/lesson.steps.length*100)+"%";
+  if(icon)icon.animate([{transform:"scale(.45) rotate(-22deg)",opacity:.2,filter:"blur(4px)"},{transform:"scale(1.22) rotate(8deg)",opacity:1,filter:"blur(0)"},{transform:"scale(1)",opacity:1}],{duration:720,easing:"cubic-bezier(.2,.8,.2,1)"});
+  if(caption)caption.animate([{opacity:.25,transform:"translateY(10px)"},{opacity:1,transform:"translateY(0)"}],{duration:500,easing:"ease-out"});
+  i++;
+ };
+ showStep();
+ uniVideoTimer=setInterval(showStep,2600);
+}
+function nextUniVideo(){clearInterval(uniVideoTimer);uniVideoStep=(uniVideoStep+1)%uniVideoLessons.length;renderUniVideo()}
+function renderUniCalendar(){const label=$("uniCalendarLabel"),grid=$("uniCalendarGrid");if(!label||!grid)return;const year=uniMonth.getFullYear(),month=uniMonth.getMonth();label.textContent=new Intl.DateTimeFormat("tr-TR",{month:"long",year:"numeric"}).format(uniMonth);grid.innerHTML="";["P","S","Ç","P","C","C","P"].forEach((d,i)=>{const el=document.createElement("span");el.className="day";el.textContent=["Pzt","Sal","Çar","Per","Cum","Cmt","Paz"][i];grid.appendChild(el)});const first=(new Date(year,month,1).getDay()+6)%7,days=new Date(year,month+1,0).getDate(),today=new Date();for(let i=0;i<first;i++){const e=document.createElement("span");e.className="empty";grid.appendChild(e)}for(let d=1;d<=days;d++){const e=document.createElement("span");e.textContent=d;if(d===today.getDate()&&month===today.getMonth()&&year===today.getFullYear())e.className="today";grid.appendChild(e)}}
+
+
+// Güvenli başlangıç: normal HTML dosyasında ve önizleme ortamlarında giriş/video kontrollerini bağla.
+
+const mebaEbaVideos={
+ fen:{title:"Fen Bilimleri",url:"https://eba.gov.tr/tr/dkY174OO"},
+ turkce:{title:"Türkçe",url:"https://eba.gov.tr/tr/GRDSm0by"},
+ matematik:{title:"Matematik",url:"https://eba.gov.tr/tr/VtzDCLgm"},
+ ingilizce:{title:"İngilizce",url:"https://eba.gov.tr/tr/YKMrt6Ui"}
+};
+function openEbaLesson(course){
+ const item=mebaEbaVideos[course];if(!item)return;
+ const modal=$("ebaLessonModal"),frame=$("ebaLessonFrame"),title=$("ebaLessonTitle"),link=$("ebaLessonExternal");
+ if(!modal||!frame||!title||!link){window.open(item.url,"_blank","noopener");return}
+ title.textContent=item.title+" · Ders Videosu";frame.src=item.url;link.href=item.url;
+ modal.classList.remove("hid");document.body.classList.add("eba-modal-open");
+}
+function closeEbaLesson(){
+ const modal=$("ebaLessonModal"),frame=$("ebaLessonFrame");
+ if(modal)modal.classList.add("hid");if(frame)frame.src="about:blank";
+ document.body.classList.remove("eba-modal-open");
+}
+
+function initUniControls(){ const ebaClose=$("ebaLessonClose");if(ebaClose)ebaClose.onclick=closeEbaLesson;const ebaModal=$("ebaLessonModal");if(ebaModal)ebaModal.addEventListener("click",e=>{if(e.target===ebaModal)closeEbaLesson()});document.addEventListener("keydown",e=>{if(e.key==="Escape")closeEbaLesson()});
+ const form=$("uniLoginForm");
+ if(form){form.onsubmit=submitUniLogin;const btn=form.querySelector(".uni-login-submit");if(btn)btn.onclick=(e)=>{e.preventDefault();submitUniLogin(e)}}
+ const back=$("uniLoginBack");if(back)back.onclick=closeUniversite;
+ const play=$("uniVideoPlay");if(play)play.onclick=playUniVideo;
+ const next=$("uniVideoNext");if(next)next.onclick=nextUniVideo;
+}
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",initUniControls,{once:true});else initUniControls();
+
+// İşnames giriş ekranı: mevcut MEBA oturumuna geçiş yapar.
+let isnTimer=null;
+function openIsnames(){
+ const login=$("login"), intro=$("isnamesIntro"), form=$("isnamesLogin");
+ if(login)login.classList.add("hid"); if($("admin"))$("admin").classList.add("hid"); if($("app"))$("app").classList.add("hid");
+ if(!intro||!form)return;intro.classList.remove("hid","hide-intro");form.classList.add("hid");
+ clearTimeout(isnTimer);isnTimer=setTimeout(()=>{intro.classList.add("hide-intro");setTimeout(()=>{intro.classList.add("hid");intro.classList.remove("hide-intro");form.classList.remove("hid");$("isnKimlik").focus()},650)},3600);
+}
+function closeIsnames(){clearTimeout(isnTimer);$("isnamesIntro").classList.add("hid");$("isnamesLogin").classList.add("hid");$("login").classList.remove("hid");$("isnPin").value="";$("isnError").textContent=""}
+function isnamesAdminLogin(){
+ const pass=$("isnAdminPass"),err=$("isnAdminError");
+ if(!pass||!err)return;
+ if(pass.value===APASS){
+  err.textContent="";pass.value="";clearTimeout(isnTimer);
+  $("isnamesIntro").classList.add("hid");$("isnamesLogin").classList.add("hid");$("login").classList.add("hid");$("app").classList.add("hid");
+  document.body.classList.add("isnames-mode");$("admin").classList.remove("hid");show();
+ }else{err.textContent="Yönetici şifresi yanlış.";pass.value="";pass.focus();const card=$("isnamesLogin").querySelector(".isn-card");card.classList.remove("shake");void card.offsetWidth;card.classList.add("shake")}
+}
+
+function submitIsnames(){
+ const name=norm($("isnKimlik").value),pin=$("isnPin").value,err=$("isnError");
+ // Bu tarayıcı tarafı prototip kontrolüdür; gerçek güvenlik için sunucu doğrulaması gerekir.
+ if(name===norm("ALPER ASLAN")&&pin==="1324"){
+   err.textContent="";clearTimeout(isnTimer);$("isnamesLogin").classList.add("hid");$("isnamesIntro").classList.add("hid");
+   me="ALPER";sayfa="ana";anim=true;document.body.classList.add("isnames-mode");$("admin").classList.add("hid");$("login").classList.add("hid");$("app").classList.remove("hid");draw();
+ }else{err.textContent="Kimlik veya PIN kodu hatalı.";const card=$("isnamesLogin").querySelector(".isn-card");card.classList.remove("shake");void card.offsetWidth;card.classList.add("shake");$("isnPin").value="";$("isnPin").focus()}
+}
+
+function show(w){const v=$("av");if(!v)return;let h="";
+ const B=(f,t)=>`<button class="btn g back" onclick="${f}">← ${t||"Geri"}</button>`;
+ if(w==="tema")h=`<div class="glass box"><h3>Tema</h3><div class="row"><button class="btn" onclick="theme('',sh)">Mavi</button><button class="btn" onclick="theme('t2',sh)">Mor</button><button class="btn" onclick="theme('t3',sh)">Yeşil</button><button class="btn" onclick="theme('t4',sh)">Turuncu</button></div><h3 style="margin-top:22px">Şekil</h3><div class="row"><button class="btn g" onclick="sh=0;theme(cur(),0)">Yuvarlak köşe</button><button class="btn g" onclick="sh=1;theme(cur(),1)">Keskin köşe</button></div></div>`+B("show()");
+ else if(w==="uye")h=`<div class="glass box"><h3>Lütfen üye seçin</h3><div class="row">${Object.entries(UYE).map(([k,n])=>`<button class="btn" onclick="pend=null;show('k${k}')">${n.replace(/</g,"&lt;")}</button>`).join("")||"<p>Henüz üye yok. Önce Üyeleri Yönet bölümünden üye ekle.</p>"}</div></div>`+B("show()");
+ else if(w&&w[0]==="k"){const k=w.slice(1);if(!pend)pend=S.tiers[k];h=`<div class="glass box"><h3>${UYE[k]} – kademe ayarla</h3><p>Şu an kayıtlı: <b>${TIER[S.tiers[k]].ad}</b>${kalanTxt(k)?" · "+kalanTxt(k):""}</p><div class="row">${["UCRETSIZ","ABONMAN","PLUS"].map(t=>`<button class="btn ${pend===t?"":"g"}" onclick="pend='${t}';show('k${k}')">${pend===t?"✔ ":""}${TIER[t].ad} ·${TIER[t].fiyat}</button>`).join("")}</div>${pend!=="UCRETSIZ"?`<label>Başlangıç tarihi</label><input type="date" id="bas" value="${pstart}" onchange="pstart=this.value;$('bit').textContent=bitTxt()"><p id="bit" style="margin:10px 0 0;opacity:.9">${bitTxt()}</p>`:`<p style="opacity:.8;margin-top:12px">Ücretsiz kademede süre yok.</p>`}<div style="margin-top:20px"><button class="btn" style="width:100%" onclick="kaydet('${k}')">💾 Kaydet</button></div><small style="opacity:.8;display:block;margin-top:10px">Kaydedince ${UYE[k]} giriş yaptığında "Buna sahipsin" olarak bu kademeyi görür.</small></div>`+B("show('uye')")}
+ else if(w==="yon")h=`<div class="glass box"><h3>👥 Üyeler</h3>${Object.entries(UYE).map(([k,n])=>`<div class="li" style="flex-wrap:wrap;gap:8px;align-items:center"><span><b>${n.replace(/</g,"&lt;")}</b> · ${TIER[S.tiers[k]].ad}<br><small style="opacity:.75">Şifre: ${(UPASS[k]||"").replace(/</g,"&lt;")}</small></span><span><button class="btn g" style="padding:8px 14px" onclick="show('p${k}')">🔑 Şifre</button> <button class="btn g" style="padding:8px 14px" onclick="show('x${k}')">🗑 Sil</button></span></div>`).join("")||"<p style='opacity:.8'>Henüz üye yok.</p>"}<h3 style="margin-top:22px">➕ Yeni üye ekle</h3><label>Ad Soyad</label><input id="ynad" placeholder="Örn: AYŞE ASLAN" autocomplete="off"><label>Şifre (en az 4 karakter)</label><input id="ynsf" placeholder="Şifre" autocomplete="off" onkeydown="if(event.key==='Enter')uyeEkle()"><div style="margin-top:16px"><button class="btn" style="width:100%" onclick="uyeEkle()">➕ Üye Ekle</button></div><small style="opacity:.75;display:block;margin-top:10px">Yeni üye Ücretsiz kademeyle başlar. Kademesini "Birisinin KADEMESİNİ Düzelt" bölümünden verebilirsin.</small></div>`+B("show()");
+ else if(w&&w[0]==="p"&&UYE[w.slice(1)]){const k=w.slice(1);h=`<div class="glass box"><h3>🔑 ${UYE[k].replace(/</g,"&lt;")} – şifre değiştir</h3><label>Yeni şifre (en az 4 karakter)</label><input id="ysf" placeholder="Yeni şifre" autocomplete="off" onkeydown="if(event.key==='Enter')sifreKaydet('${k}')"><div style="margin-top:16px"><button class="btn" style="width:100%" onclick="sifreKaydet('${k}')">💾 Şifreyi Kaydet</button></div></div>`+B("show('yon')")}
+ else if(w&&w[0]==="x"&&UYE[w.slice(1)]){const k=w.slice(1);h=`<div class="glass box"><h3>🗑 ${UYE[k].replace(/</g,"&lt;")} silinsin mi?</h3><p>Üyenin hesabı, paketi ve süresi silinir. Bu işlem geri alınamaz.</p><div class="row"><button class="btn" onclick="uyeSil('${k}')">Evet, sil</button><button class="btn g" onclick="show('yon')">Vazgeç</button></div></div>`}
+ else h=`<div class="grid"><div class="glass opt" onclick="show('tema')"><i>🎨</i>Şekilleri / Temaları Değiştir</div><div class="glass opt" onclick="show('uye')"><i>👤</i>Birisinin KADEMESİNİ Düzelt</div><div class="glass opt" onclick="show('yon')"><i>👥</i>Üyeleri Yönet (ekle · şifre · sil)</div><div class="glass opt" onclick="cikis()"><i>⎋</i>Çıkış</div></div>`;
+ v.innerHTML=h}
+
+async function kaydet(k){if(!pend)return;const secilen=pend;if(!S.exp)S.exp={};
+ S.tiers[k]=secilen;
+ if(secilen==="UCRETSIZ")delete S.exp[k];else{const e=bitisHesapla(pstart,secilen);if(!e){toast("⚠ Başlangıç tarihini seç");return}if(e<=Date.now()){toast("⚠ Bu tarihte süre zaten dolmuş, daha yeni bir başlangıç tarihi seç");return}S.exp[k]=e}
+ pend=null;loc();
+ const ek=S.exp[k]?" · bitiş "+fmt(S.exp[k]):"";
+ if(ref){try{await ref.set(S);toast("✔ Kaydedildi: "+UYE[k]+" → "+TIER[secilen].ad+ek+" (bulutta)")}catch(e){toast("⚠ Bu cihaza kaydedildi ama buluta yazılamadı")}}
+ else toast("✔ Kaydedildi: "+UYE[k]+" → "+TIER[secilen].ad+ek+" (bu cihazda; bulut bağlı değil)");
+ show('uye')}
+async function yaz(msg){loc();if(ref){try{await ref.set(S);toast("✔ "+msg+" (bulutta)")}catch(e){toast("⚠ Bu cihaza kaydedildi ama buluta yazılamadı")}}else toast("✔ "+msg+" (bu cihazda; bulut bağlı değil)")}
+function uyeEkle(){const ad=$("ynad").value.trim().toLocaleUpperCase("tr").replace(/\s+/g," "),sf=$("ynsf").value.trim();
+ if(ad.length<3){toast("⚠ Ad Soyad en az 3 harf olmalı");return}
+ if(sf.length<4){toast("⚠ Şifre en az 4 karakter olmalı");return}
+ if(sf===APASS){toast("⚠ Bu şifre yönetici şifresiyle aynı olamaz");return}
+ if(Object.values(UYE).some(n=>norm(n)===norm(ad))){toast("⚠ Bu isimde bir üye zaten var");return}
+ const id="U"+Date.now().toString(36);S.users[id]={ad,pass:sf};S.tiers[id]="UCRETSIZ";syncUsers();yaz(ad+" eklendi (Ücretsiz)");show("yon")}
+function sifreKaydet(k){const sf=$("ysf").value.trim();
+ if(sf.length<4){toast("⚠ Şifre en az 4 karakter olmalı");return}
+ if(sf===APASS){toast("⚠ Bu şifre yönetici şifresiyle aynı olamaz");return}
+ S.users[k].pass=sf;syncUsers();yaz(UYE[k]+" şifresi değiştirildi");show("yon")}
+function uyeSil(k){const ad=UYE[k];delete S.users[k];delete S.tiers[k];if(S.exp)delete S.exp[k];syncUsers();yaz(ad+" silindi");show("yon")}
+function go(p){sayfa=p;anim=true;draw()}
+function liste(key,ad,i){const a=S[key],t=TIER[S.tiers[me]];
+ return `<div class="glass box"><h3>${key==="shop"?"🛒":"✅"} ${ad}</h3>${a.length?a.map((x,j)=>`<div class="li">${x.replace(/</g,"&lt;")}<button onclick="del('${key}',${j})">✕</button></div>`).join(""):"<p style='opacity:.7'>Şimdilik yok, hemen oluştur</p>"}
+ <div class="row" style="flex-wrap:nowrap;margin-top:12px"><input id="i_${key}" placeholder="Yeni ekle…" onkeydown="if(event.key==='Enter')add('${key}')"><button class="btn" style="flex:none;min-width:0" onclick="add('${key}')">Oluştur</button></div>
+ ${t.lim<99?`<small style="opacity:.7;display:block;margin-top:8px">Ücretsiz kademede en fazla ${t.lim} öğe.</small>`:""}</div>`}
+function add(k){const v=$("i_"+k).value.trim();if(!v)return;if(S[k].length>=TIER[S.tiers[me]].lim){toast("Limit doldu. Kademe yükseltmek için yetkili biriyle iletişime geç.");return}S[k].push(v);save();anim=false;draw()}
+function del(k,i){S[k].splice(i,1);save();anim=false;draw()}
+function tiers(){const t=S.tiers[me];const L=[["UCRETSIZ",["Sınırlı ABOT","Sınırlı Yapılacaklar","Sınırlı Alışveriş","Ücretsiz takvim"],"Kademe yükseltmek için yetkili biriyle iletişime geç."],["ABONMAN",["2 aylık ABOT","2 aylık Yapılacaklar","2 aylık Alışveriş","Ücretsiz takvim"],"Satın almak için yetkili biriyle iletişime geçerek ödemeyi nakit verebilirsin."],["PLUS",["2,5 aylık ABOT","2,5 aylık Yapılacaklar","2,5 aylık Alışveriş","Takvime güncelleme"],"Satın almak için yetkili biriyle iletişime geçerek ödemeyi nakit verebilirsin."]];
+ return `<div class="sec">⭐ Kademeler</div><div class="tiers">${L.map(([k,f,n],i)=>`<div class="glass tier ${k===t?"cur":""}"><h3>${TIER[k].ad}${k===t?'<span class="badge">Buna sahipsin</span>':""}</h3><div class="p">${TIER[k].fiyat}</div>${k===t&&kalanTxt(me)?`<div style="margin:-4px 0 8px;font-weight:700">⏳ ${kalanTxt(me)}</div>`:""}<b>İçindekiler</b><ul>${f.map(x=>`<li>${x}</li>`).join("")}</ul><small>${n}</small></div>`).join("")}</div>`}
+function kontrolPaneli(){const best=(()=>{try{return +localStorage.getItem("meba-best")||0}catch(e){return 0}})();const tr=new Date().toLocaleDateString("tr-TR",{day:"numeric",month:"long",weekday:"long"});return `<div class="glass box" style="margin:0 0 18px;padding:20px"><div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap"><div><small style="opacity:.7">MEBA KONTROL MERKEZİ</small><h3 style="margin:3px 0 0">📌 ${tr}</h3></div><span class="badge">V4.0</span></div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px"><div class="glass" style="padding:14px;text-align:center"><b style="font-size:24px">${S.shop.length}</b><small style="display:block;opacity:.75">🛒 Alışveriş</small></div><div class="glass" style="padding:14px;text-align:center"><b style="font-size:24px">${S.todo.length}</b><small style="display:block;opacity:.75">✅ Görev</small></div><div class="glass" style="padding:14px;text-align:center"><b style="font-size:24px">${TIER[S.tiers[me]].ad}</b><small style="display:block;opacity:.75">⭐ Paket</small></div><div class="glass" style="padding:14px;text-align:center"><b style="font-size:24px">${best}</b><small style="display:block;opacity:.75">🚀 Roket Rekoru</small></div></div></div>`}
+function hero(){const now=new Date(),s=new Date(now);s.setDate(s.getDate()+sel);
+ const days=[-3,-2,-1,0,1,2,3].map(o=>{const d=new Date(now);d.setDate(d.getDate()+off+o);const v=off+o;return `<div class="d ${v===sel?"on":""}" onclick="sel=${v};anim=false;draw()">${d.getDate()}</div>`}).join("");
+ return `<div class="hero"><div class="glass cal"><small style="opacity:.8">📅 Takvim</small><h2><b>${s.toLocaleDateString("tr-TR",{day:"numeric",month:"long"})}</b>, ${s.toLocaleDateString("tr-TR",{weekday:"long"})}</h2><div style="opacity:.85">Bugün etkinliğiniz bulunmuyor</div><div class="days"><button class="ar" onclick="off-=7;anim=false;draw()">‹</button>${days}<button class="ar" onclick="off+=7;anim=false;draw()">›</button></div><div class="fig">👨‍👩‍👧‍👦</div></div>
+ <div class="glass stats"><div><b>${S.shop.length}</b><small>Alışveriş öğesi</small></div><div><b>${S.todo.length}</b><small>Yapılacak</small></div></div></div>`}
+function smsbo(){
+ const users=Object.entries(UYE).filter(([k])=>k!==me);
+ const sec=smsSecili&&UYE[smsSecili]?smsSecili:null;
+ const selected=sec?UYE[sec]:"";
+ const list=users.length?users.map(([k,n])=>`<div class="sms-person ${k===sec?"on":""}" data-name="${norm(n)}" onclick="smsSec('${k}')"><div class="sms-avatar">${n[0]}</div><div><b>${n.replace(/</g,"&lt;")}</b><small style="display:block;opacity:.7">SMSBO</small></div></div>`).join(""):`<div class="sms-empty"><span class="big">👥</span><b>Hiç arkadaşın yok, hadi arkadaş ol</b></div>`;
+ let chat="";
+ if(sec){
+   chat=`<div class="sms-chat-head"><div class="sms-avatar">${selected[0]}</div><div><b>${selected.replace(/</g,"&lt;")}</b><small style="display:block;opacity:.7">SMSBO mesajlaşması</small></div></div><div class="sms-messages" id="smsMsgs"><div class="sms-empty"><span class="big">💬</span><b>Henüz mesaj yok</b></div></div><div class="sms-compose"><input id="smsInput" placeholder="Mesaj yaz..." onkeydown="if(event.key==='Enter')smsGonder()"><button class="btn" onclick="smsGonder()">➤ Gönder</button></div>`;
+ }else if(users.length){chat=`<div class="sms-empty"><span class="big">💬</span><h2>SMSBO</h2><div>Kişilerden birini seçerek mesajlaşmaya başlayabilirsin.</div></div>`;}
+ return `<div class="sec">💬 SMSBO</div><div class="sms-layout"><div class="glass sms-list"><h2>Kişiler</h2><input class="sms-search" id="smsAra" placeholder="🔍 Kişi ara..." oninput="smsFiltre()"><div id="smsPeople">${list}</div></div><div class="glass sms-chat">${chat||`<div class="sms-empty"><span class="big">👥</span><b>Hiç arkadaşın yok, hadi arkadaş ol</b></div>`}</div></div>`;
+}
+function smsFiltre(){const v=norm($("smsAra")?.value||"");document.querySelectorAll(".sms-person").forEach(e=>e.style.display=norm(e.dataset.name).includes(v)?"flex":"none");}
+function smsSec(k){smsSecili=k;anim=false;draw();}
+function smsGonder(){const i=$("smsInput"),box=$("smsMsgs");if(!i||!box)return;const v=i.value.trim();if(!v)return;const empty=box.querySelector(".sms-empty");if(empty)empty.remove();box.innerHTML+=`<div class="sms-msg me">${v.replace(/</g,"&lt;")}</div>`;i.value="";box.scrollTop=box.scrollHeight;}
+function havaKod(k){const m={0:['☀️','Açık'],1:['🌤️','Çoğunlukla açık'],2:['⛅','Parçalı bulutlu'],3:['☁️','Kapalı'],45:['🌫️','Sisli'],48:['🌫️','Kırağılı sis'],51:['🌦️','Hafif çiseleme'],53:['🌦️','Çiseleme'],55:['🌧️','Yoğun çiseleme'],56:['🌧️','Hafif dondurucu çiseleme'],57:['🌧️','Yoğun dondurucu çiseleme'],61:['🌦️','Hafif yağmur'],63:['🌧️','Yağmur'],65:['🌧️','Kuvvetli yağmur'],66:['🌧️','Hafif dondurucu yağmur'],67:['🌧️','Kuvvetli dondurucu yağmur'],71:['🌨️','Hafif kar'],73:['🌨️','Kar'],75:['❄️','Kuvvetli kar'],77:['❄️','Kar taneleri'],80:['🌦️','Hafif sağanak'],81:['🌧️','Sağanak'],82:['⛈️','Kuvvetli sağanak'],85:['🌨️','Kar sağanağı'],86:['🌨️','Kuvvetli kar sağanağı'],95:['⛈️','Gök gürültülü fırtına'],96:['⛈️','Dolu ihtimalli fırtına'],99:['⛈️','Kuvvetli dolulu fırtına']};return m[k]||['🌡️','Bilinmeyen durum']}
+function havaDurumu(){return `<div class="sec">🌤️ Hava Durumu</div><div class="weather-wrap"><div class="glass weather-main"><div id="havaDurumuIcerik"><h2 style="margin:0 0 8px">Konumuna göre hava durumu</h2><p style="opacity:.8">Hava durumunu görmek için konum iznini kullanabilirsin.</p><button class="btn" onclick="havaYukle()">📍 Hava Durumunu Getir</button></div></div><div class="glass box"><h3 style="margin-top:0">🌦️ Hava Durumu</h3><p style="opacity:.8">Anlık sıcaklık, hava durumu ve rüzgâr bilgisi görüntülenir.</p><small style="opacity:.65">Veri: Open-Meteo</small></div></div>`}
+async function havaYukle(){const el=$("havaDurumuIcerik");if(!el)return;el.innerHTML='<h2 style="margin:0">Yükleniyor…</h2><p style="opacity:.8">Konum ve hava durumu bilgisi alınıyor.</p>';try{
+ if(!navigator.geolocation)throw new Error('Konum desteklenmiyor');
+ const pos=await new Promise((resolve,reject)=>navigator.geolocation.getCurrentPosition(resolve,reject,{enableHighAccuracy:false,timeout:10000,maximumAge:300000}));
+ const lat=pos.coords.latitude,lon=pos.coords.longitude;
+ const u=`https://api.open-meteo.com/v1/forecast?latitude=${encodeURIComponent(lat)}&longitude=${encodeURIComponent(lon)}&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m&timezone=auto`;
+ const r=await fetch(u);if(!r.ok)throw new Error('Hava servisine ulaşılamadı');const d=await r.json();const c=d.current||{};const q=havaKod(c.weather_code);el.innerHTML=`<div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap"><div style="font-size:64px">${q[0]}</div><div><h2 style="margin:0">${q[1]}</h2><div class="weather-temp">${Math.round(c.temperature_2m)}°C</div></div></div><div class="weather-meta"><div class="glass"><b>🌡️ Hissedilen</b><br>${Math.round(c.apparent_temperature)}°C</div><div class="glass"><b>💧 Nem</b><br>${Math.round(c.relative_humidity_2m)}%</div><div class="glass"><b>💨 Rüzgâr</b><br>${Math.round(c.wind_speed_10m)} km/sa</div></div><small style="display:block;margin-top:14px;opacity:.65">Konum: ${lat.toFixed(2)}, ${lon.toFixed(2)} · Güncelleme: ${c.time||''}</small>`;
+ }catch(e){el.innerHTML='<h2 style="margin:0 0 8px">Hava durumu alınamadı</h2><p style="opacity:.8">Konum izni verilmemiş olabilir veya hava servisine ulaşılamadı.</p><button class="btn" onclick="havaYukle()">↻ Tekrar Dene</button>'}}
+function yardimDestek(){return `<div class="sec">🆘 Yardım & Destek</div><div class="help-grid"><div class="glass help-item"><h3>🔐 Giriş yapamıyorum</h3><p>Kimlik ve şifreni doğru girdiğinden emin ol. Şifreni unuttuysan yönetici tarafından değiştirilmesini isteyebilirsin.</p></div><div class="glass help-item"><h3>⭐ Kademe / Paket</h3><p>Paket bilgini ana sayfadaki profil alanından ve Kademe bölümünden kontrol edebilirsin.</p></div><div class="glass help-item"><h3>🎮 Oyun</h3><p>Sol menüdeki Oyun bölümünden Uzay Roketi oyununu açıp oynayabilirsin.</p></div><div class="glass help-item"><h3>🌤️ Hava Durumu</h3><p>Hava Durumu bölümünde “Hava Durumunu Getir” düğmesine basarak konumuna göre anlık bilgileri görebilirsin.</p></div><div class="glass help-item"><h3>🤖 ABOT</h3><p>Sağ alttaki ✦ ABOT düğmesinden MEBA ile ilgili temel sorularını sorabilirsin.</p></div><div class="glass help-item"><h3>📩 Destek</h3><p>Bir sorun devam ederse MEBA yöneticinle iletişime geç.</p></div></div>`}
+
+function draw(){syncUsers();sweep();if(me&&!UYE[me]){cikis();return}if(!me)return;
+ const N=[["ana","🏠","Anasayfa"],["smsbo","💬","SMSBO"],["takvim","📅","Takvim"],["hava","🌤️","Hava Durumu"],["alis","🛒","Alışveriş"],["yap","✅","Yapılacaklar"],["kademe","⭐","Kademe"],["oyun","🎮","Oyun"],["yardim","🆘","Yardım & Destek"]];
+ const banner=document.querySelector("#app .ban");if(banner)banner.innerHTML=document.body.classList.contains("isnames-mode")?`💼 MEBA İŞNAMES · İŞİN BİR ÜST VERSİYONU <small style="margin-left:auto;opacity:.8">V5.5</small>`:`<span>🚀</span>MEBA V4.0 yenileniyor! Yeni özellikler kısa süre içinde geliyor. <small id="cl" style="margin-left:auto;opacity:.8"></small>`;const navEl=$("nav");if(navEl)navEl.innerHTML=N.map(([k,i,n])=>`<button class="nv ${k===sayfa?"on":""}" onclick="go('${k}')"><span>${i}</span><b>${n}</b></button>`).join("");
+ if(sayfa==="oyun"&&$("cv"))return;
+ let h=`<div class="top"><h1 style="margin:0">Hoş Geldin <b>${UYE[me]}</b> <span class="badge" style="font-size:14px;vertical-align:middle">📦 Paketin: ${TIER[S.tiers[me]].ad}${kalanTxt(me)?" · ⏳ "+kalanTxt(me).split(" · ")[0]:""}</span></h1><div class="glass ic"><i>🔍</i><i>🔔</i><i>✉</i><i>⭐</i><div class="av">${UYE[me][0]}</div></div></div>`;
+ if(sayfa==="ana"){
+   if(document.body.classList.contains("isnames-mode")){
+     const brand=$("appBrand");if(brand)brand.textContent="İŞNAMES";
+     h+=`<div class="isn-home-head"><div class="mark-mini">💼</div><div><h2>MEBA İŞNAMES</h2><p>İŞİN BİR ÜST VERSİYONU · SÜRÜM 5.5</p></div></div>`+hero()+
+       `<div class="sec">Hızlı Erişim</div><div class="isn-shortcuts">
+        <div class="isn-shortcut" onclick="go('takvim')"><span class="shortcut-icon">📅</span><h3>Takvim</h3><p>Günlerini ve tarihlerini görüntüle.</p></div>
+        <div class="isn-shortcut" onclick="go('oyun')"><span class="shortcut-icon">🚀</span><h3>Uzay Roketi</h3><p>Oyunu aç, engellerden kaç ve rekorunu geliştir.</p></div>
+        <div class="isn-shortcut" onclick="go('smsbo')"><span class="shortcut-icon">💬</span><h3>SMSBO</h3><p>Kişilerini seç ve mesajlaşma alanına geç.</p></div>
+        <div class="isn-shortcut" onclick="go('hava');havaYukle()"><span class="shortcut-icon">🌤️</span><h3>Hava Durumu</h3><p>Konum izni vererek bulunduğun yere göre hava durumunu öğren.</p></div>
+       </div>`+kontrolPaneli()+`<div class="cards">${liste("shop","Alışveriş Listesi",3)}${liste("todo","Yapılacaklar",4)}</div>`+tiers();
+   }else{const brand=$("appBrand");if(brand)brand.textContent="MEBA";h+=hero()+kontrolPaneli()+`<div class="glass smsbo-card" onclick="go('smsbo')"><div class="smsbo-icon">💬</div><div style="flex:1"><h3 style="margin:0">SMSBO</h3><small style="opacity:.8">WhatsApp gibi mesajlaş, kişilerini ara ve seç.</small></div><button class="btn">💬 Aç</button></div><div class="glass box" style="display:flex;align-items:center;gap:18px;flex-wrap:wrap;cursor:pointer;margin-bottom:18px" onclick="go('oyun')"><span style="font-size:54px;display:inline-block;animation:flo 3s ease-in-out infinite">🚀</span><div style="flex:1;min-width:180px"><h3 style="margin:0">Oyun · Uzay Roketi</h3><small style="opacity:.8">Engellerden kaç, en yüksek puanı yap!</small></div><button class="btn">🎮 Hemen Başla</button></div><div class="cards">${liste("shop","Alışveriş Listesi",3)}${liste("todo","Yapılacaklar",4)}</div><div class="glass box" style="opacity:.9">🔜 <b>Yakında:</b> yeni özellikler</div>`+tiers();}
+ }
+ else if(sayfa==="smsbo")h+=smsbo();
+ else if(sayfa==="takvim")h+=hero();
+ else if(sayfa==="hava")h+=havaDurumu();
+ else if(sayfa==="yardim")h+=yardimDestek();
+ else if(sayfa==="alis")h+=liste("shop","Alışveriş Listesi",1);
+ else if(sayfa==="yap")h+=liste("todo","Yapılacaklar",1);
+ else if(sayfa==="oyun")h+=`<div class="glass box"><h3>🚀 Uzay Roketi</h3><canvas id="cv" width="360" height="520" style="width:100%;max-width:360px;display:block;margin:auto;border-radius:var(--r);touch-action:none;background:#0004"></canvas><div class="row" style="margin:14px auto 0;max-width:360px;flex-wrap:nowrap"><button class="btn g" id="bl" style="min-width:0">◀</button><button class="btn" id="obtn" style="min-width:0;flex:2">▶ Başla</button><button class="btn g" id="br" style="min-width:0">▶</button></div><small style="display:block;text-align:center;opacity:.8;margin-top:10px">Klavyede ← → ya da ekranda parmağınla sağa-sola kaydır.</small></div>`;
+ else h+=tiers();
+ const pgEl=$("pg");if(pgEl)pgEl.innerHTML=h;anim=false;if(sayfa==="oyun")oyunKur()}
+const K={l:0,r:0};
+addEventListener("keydown",e=>{if(sayfa!=="oyun"||!me)return;const k=e.key;if(k==="ArrowLeft"||k==="a"||k==="A"){K.l=1;e.preventDefault()}if(k==="ArrowRight"||k==="d"||k==="D"){K.r=1;e.preventDefault()}});
+addEventListener("keyup",e=>{const k=e.key;if(k==="ArrowLeft"||k==="a"||k==="A")K.l=0;if(k==="ArrowRight"||k==="d"||k==="D")K.r=0});
+function oyunKur(){cancelAnimationFrame(window.__raf);const c=$("cv"),x=c?c.getContext("2d"):null,W=360,H=520,R=Math.random;if(!c||!x)return;
+ let st="bekle",px=W/2,tx=px,ob=[],sc=0,t=0,best=0;try{best=+localStorage.getItem("meba-best")||0}catch(e){}
+ const stars=Array.from({length:45},()=>({x:R()*W,y:R()*H,s:.5+R()*2}));
+ const ac=getComputedStyle(document.body).getPropertyValue("--a").trim()||"#3b9bff";
+ function baslat(){ob=[];sc=0;t=0;px=tx=W/2;st="oyun"}
+ const oBtn=$("obtn");if(oBtn)oBtn.onclick=()=>{baslat();oBtn.textContent="🔄 Yeniden"};
+ const hold=(id,k)=>{const b=$(id);if(!b)return;b.onpointerdown=()=>K[k]=1;b.onpointerup=b.onpointerleave=()=>K[k]=0};hold("bl","l");hold("br","r");
+ const mv=e=>{const r=c.getBoundingClientRect();tx=(e.clientX-r.left)*W/r.width};
+ c.onpointermove=mv;c.onpointerdown=e=>{mv(e);if(st!=="oyun"){baslat();if(oBtn)oBtn.textContent="🔄 Yeniden"}};
+ function bit(){st="bitti";if(sc>best){best=sc;try{localStorage.setItem("meba-best",best)}catch(e){}}}
+ function txt(m,y,sz,a){x.fillStyle="#fff";x.globalAlpha=a||1;x.font="700 "+sz+"px system-ui";x.textAlign="center";x.fillText(m,W/2,y);x.globalAlpha=1}
+ function roket(){x.save();x.translate(px,H-70);const f=8+R()*14;
+  x.fillStyle="#ffb347";x.beginPath();x.moveTo(-7,16);x.lineTo(0,16+f+8);x.lineTo(7,16);x.fill();
+  x.fillStyle=ac;x.beginPath();x.moveTo(-14,18);x.lineTo(-9,0);x.lineTo(-9,18);x.fill();x.beginPath();x.moveTo(14,18);x.lineTo(9,0);x.lineTo(9,18);x.fill();
+  x.fillStyle="#fff";x.beginPath();x.moveTo(0,-26);x.quadraticCurveTo(13,-6,9,18);x.lineTo(-9,18);x.quadraticCurveTo(-13,-6,0,-26);x.fill();
+  x.fillStyle="#081b3e";x.beginPath();x.arc(0,-4,5,0,Math.PI*2);x.fill();
+  x.strokeStyle=ac;x.lineWidth=2;x.beginPath();x.arc(0,-4,5,0,Math.PI*2);x.stroke();x.restore()}
+ function eng(o){x.fillStyle="#ff6b6b";x.beginPath();x.arc(o.x,o.y,o.r,0,Math.PI*2);x.fill();x.strokeStyle="#fff4";x.lineWidth=2;x.stroke()}
+ function loop(){x.clearRect(0,0,W,H);t++;stars.forEach(s=>{s.y+=s.s*(st==="oyun"?2:1);if(s.y>H)s.y=0;x.fillStyle="#fff";x.globalAlpha=s.s/2.5;x.fillRect(s.x,s.y,s.s,s.s)});x.globalAlpha=1;
+  if(st==="bekle"){txt("🚀 MEBA ROKET",180,26);txt("Başlamak için dokun veya tuşa bas",220,13,0.8);txt("Rekor: "+best,260,15,0.9);roket()}
+  else if(st==="oyun"){
+   if(K.l)tx-=7;if(K.r)tx+=7;tx=Math.max(22,Math.min(W-22,tx));px+=(tx-px)*.35;
+   if(t%Math.max(12,40-Math.floor(sc/30))===0)ob.push({x:20+R()*(W-40),y:-20,r:12+R()*14,v:2.5+R()*2+sc/100});
+   ob.forEach(o=>o.y+=o.v);ob=ob.filter(o=>o.y<H+30);sc++;
+   for(let o of ob){const dx=px-o.x,dy=(H-70)-o.y;if(Math.hypot(dx,dy)<o.r+16){bit();break}}
+   ob.forEach(eng);roket();txt(sc+"",50,32);txt("Rekor: "+best,80,12,0.7)
+  }else{
+   ob.forEach(eng);roket();
+   x.fillStyle="#0009";x.fillRect(20,120,W-40,240);
+   txt("💥 OYUN BİTTİ",170,24);txt("Puan: "+sc,215,22);
+   if(sc>=best&&sc>0)txt("🏆 YENİ REKOR!",245,14);txt("En Yüksek: "+best,275,14,0.8);txt("Ekrana dokunarak yeniden başla",320,12,0.7)
+  }
+  window.__raf=requestAnimationFrame(loop)}
+ window.__raf=requestAnimationFrame(loop)}
+function sor(){const i=$("q");if(!i)return;const v=i.value.trim();if(!v)return;const m=$("msgs");if(!m)return;m.innerHTML+=`<p class="me"><b>Siz:</b> ${v.replace(/</g,"&lt;")}</p>`;i.value="";
+ setTimeout(()=>{const t=S.tiers[me],a=v.toLowerCase();let r="Anladım! MEBA sisteminde size nasıl yardımcı olabilirim?";
+  if(a.includes("kademe")||a.includes("paket"))r="Şu anki kademeniz: <b>"+TIER[t].ad+"</b>. Fiyat: "+TIER[t].fiyat;
+  else if(a.includes("merhaba")||a.includes("selam"))r="Merhaba! Benim adım ABOT. Ailenizin dijital asistanıyım 🤖";
+  else if(a.includes("oyun"))r="Oyuna sol menüdeki 🎮 Oyun butonundan veya anasayfadaki karttan ulaşabilirsiniz!";
+  m.innerHTML+=`<p><b>ABOT:</b> ${r}</p>`;m.scrollTop=m.scrollHeight},600)}
+</script>
+
+<!-- Güvenlik notu: Bu tek HTML dosyası gerçek sunucu tarafı kimlik doğrulaması sağlamaz. -->
+</body></html>
